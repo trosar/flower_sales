@@ -13,7 +13,7 @@ if (isset($_POST['add_to_cart'])) {
 }
 
 $cart_count = isset($_SESSION['cart']) ? array_sum($_SESSION['cart']) : 0;
-$products = $pdo->query("SELECT * FROM products LIMIT 15")->fetchAll();
+$products = $pdo->query("SELECT * FROM products")->fetchAll();
 ?>
 
 <!DOCTYPE html>

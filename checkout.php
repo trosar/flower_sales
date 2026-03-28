@@ -94,6 +94,16 @@ $grand_total = 0;
             .main-container { padding: 20px; }
             td, th { padding: 8px; font-size: 0.9rem; }
         }
+
+        input[type="text"], 
+        input[type="password"], 
+        input[type="email"], 
+        input[type="tel"], 
+        input[type="number"], 
+        textarea, 
+        select {
+            font-size: 16px !important;
+        }        
     </style>
 </head>
 <body>
