@@ -197,6 +197,9 @@ $products = $pdo->query("SELECT * FROM products order by price desc")->fetchAll(
         <h3>Products are Sponsored By: 
         <a href="https://www.stadiumflowers.com/" target="_blank"><img class="stadium_logo" src="media/Stadium_Flowers_Logo.png" alt="Stadium Flowers Logo"></a>
         </h3>
+        <br/>
+        <small><a href="https://www.troop60.co/fundraisers/admin">Admin Login</a></small>
+        </br/>
     </div>
 
 </div>
