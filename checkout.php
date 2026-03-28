@@ -1,6 +1,10 @@
 <?php
 require_once 'db.php'; // Includes session_start and PDO connection
 
+// Get the saved details if they exist
+$saved = $_SESSION['checkout_details'] ?? [];
+$selectedPayment = $saved['payment'] ?? '';
+
 // 1. Handle "Remove" Action
 if (isset($_GET['remove'])) {
     $id_to_remove = $_GET['remove'];
@@ -123,19 +127,8 @@ $grand_total = 0;
                         $subtotal = $product['price'] * $qty;
                         $grand_total += $subtotal;
                 ?>
-                <tr>
+                <tr id="row-<?php echo $id; ?>">
                     <td><strong><?php echo htmlspecialchars($product['name']); ?></strong><br><small>$<?php echo number_format($product['price'], 2); ?> ea</small></td>
-                    <!-- 
-                    <td>
-                        <form method="POST" style="display:inline;">
-                            <input type="hidden" name="product_id" value="<?php echo $id; ?>">
-                            <input type="number" name="quantity" value="<?php echo $qty; ?>" min="1" max="9" class="qty-input">
-                            <button type="submit" name="update_qty" class="btn-update">OK</button>
-                        </form>
-                    </td>
-                    <td>$<?php echo number_format($subtotal, 2); ?></td>
-                    <td><a href="?remove=<?php echo $id; ?>&<?php echo SID_STR; ?>" class="btn-remove" onclick="return confirm('Remove this item?')">Remove</a></td> 
-                    -->
                     <td>
                         <div class="qty-controls">
                             <input type="number" value="<?php echo $qty; ?>" min="1" max="9" 
@@ -153,29 +146,33 @@ $grand_total = 0;
 
         <div class="total-row">Grand Total: $<span id="grand-total-display"><?php echo number_format($grand_total, 2); ?></span></div>
 
-        <form action="process_order.php?<?php echo SID_STR; ?>" method="POST">
-            <h2>Finalize Your Order</h2>
+        <form action="confirmation.php?<?php echo SID_STR; ?>" method="POST">
+            <h2>Checkout Information</h2>
             <div class="form-group">
                 <label>How will you pay?</label>
                 <select name="payment" required>
-                    <option value="Venmo">Venmo</option>
-                    <option value="Cash">Cash</option>
-                    <option value="Cheque">Cheque</option>
+                    <option value="Venmo" <?php echo ($selectedPayment === 'Venmo') ? 'selected' : ''; ?>>Venmo</option>
+                    <option value="Cash" <?php echo ($selectedPayment === 'Cash') ? 'selected' : ''; ?>>Cash</option>
+                    <option value="Check" <?php echo ($selectedPayment === 'Check') ? 'selected' : ''; ?>>Check</option>
                 </select>
             </div>
             <div class="form-group">
-                <label>Your Full Name</label>
-                <input type="text" name="name" required placeholder="John Doe">
+                <label>Your Name</label>
+                <input type="text" name="name" required value="<?php echo htmlspecialchars($saved['name'] ?? ''); ?>" placeholder="" >
+            </div>
+            <div class="form-group">
+                <label>Delivery Address</label>
+                <input type="text" name="address" required value="<?php echo htmlspecialchars($saved['address'] ?? ''); ?>" placeholder="">
             </div>
             <div class="form-group">
                 <label>Email Address</label>
-                <input type="email" name="email" required placeholder="john@example.com">
+                <input type="email" name="email" required value="<?php echo htmlspecialchars($saved['email'] ?? ''); ?>" placeholder="">
             </div>
             <div class="form-group">
                 <label>Scout's Name (Who gets the credit?)</label>
-                <input type="text" name="scout_name" required placeholder="Jimmy Smith">
+                <input type="text" name="scout_name" required value="<?php echo htmlspecialchars($saved['scout_name'] ?? ''); ?>" placeholder="">
             </div>
-            <button type="submit" class="btn-checkout">Complete Checkout</button>
+            <button type="submit" class="btn-checkout">Review Your Order</button>
         </form>
     <?php endif; ?>
 </div>
@@ -184,22 +181,18 @@ $grand_total = 0;
 const sidParam = '<?php echo SID_STR; ?>';
 let itemToDelete = null;
 
-// Use one listener for the whole document to avoid "null" errors
 document.addEventListener('click', function(e) {
-    // 1. Handle "Remove" link click
     if (e.target.classList.contains('ajax-remove')) {
         e.preventDefault();
         itemToDelete = e.target.dataset.id;
         document.getElementById('custom-modal').style.display = 'block';
     }
 
-    // 2. Handle Modal "Cancel"
     if (e.target.id === 'modal-cancel') {
         document.getElementById('custom-modal').style.display = 'none';
         itemToDelete = null;
     }
 
-    // 3. Handle Modal "Confirm"
     if (e.target.id === 'modal-confirm') {
         if (itemToDelete) {
             updateCart(itemToDelete, 0, 'remove');
@@ -208,7 +201,6 @@ document.addEventListener('click', function(e) {
     }
 });
 
-// Update quantity on change
 document.addEventListener('change', function(e) {
     if (e.target.classList.contains('ajax-qty')) {
         updateCart(e.target.dataset.id, e.target.value, 'update');
@@ -228,13 +220,23 @@ function updateCart(pId, qty, action) {
     .then(res => res.json())
     .then(data => {
         if (data.status === 'success') {
+            // 1. Handle Removal
             if (action === 'remove' || qty <= 0) {
                 const row = document.getElementById(`row-${pId}`);
                 if (row) row.remove();
+            } else {
+                // 2. Handle Subtotal Update (This was the missing piece!)
+                const subtotalDisplay = document.getElementById(`subtotal-${pId}`);
+                if (subtotalDisplay) {
+                    subtotalDisplay.innerText = '$' + data.new_subtotal;
+                }
             }
             
+            // 3. Update Grand Total
             const totalDisplay = document.getElementById('grand-total-display');
-            if (totalDisplay) totalDisplay.innerText = data.grand_total;
+            if (totalDisplay) {
+                totalDisplay.innerText = data.grand_total;
+            }
 
             if (data.cart_empty) {
                 location.reload(); 

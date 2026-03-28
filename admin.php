@@ -39,10 +39,10 @@ if (isset($_SESSION['admin_logged_in'])) {
         header('Content-Type: text/csv');
         header('Content-Disposition: attachment; filename="order_info_' . date('Y-m-d') . '.csv"');
         $output = fopen('php://output', 'w');
-        fputcsv($output, ['Order ID', 'Date', 'Customer', 'Email', 'Scout', 'Payment', 'Total', 'Status']);
+        fputcsv($output, ['Order ID', 'Date', 'Customer', 'Address', 'Email', 'Scout', 'Payment', 'Total', 'Status']);
         $stmt = $pdo->query("SELECT * FROM orders ORDER BY order_date DESC");
         while ($row = $stmt->fetch()) {
-            fputcsv($output, [$row['id'], $row['order_date'], $row['customer_name'], $row['email'], $row['scout_name'], $row['payment_mode'], $row['total_amount'], $row['status']]);
+            fputcsv($output, [$row['id'], $row['order_date'], $row['customer_name'], $row['address'], $row['email'], $row['scout_name'], $row['payment_mode'], $row['total_amount'], $row['status']]);
         }
         fclose($output);
         exit;
@@ -167,6 +167,7 @@ if (!isset($_SESSION['admin_logged_in'])): ?>
             </div>
 
             <p style="margin: 5px 0;"><strong>Customer:</strong> <?php echo htmlspecialchars($order['customer_name']); ?> (<?php echo htmlspecialchars($order['email']); ?>)</p>
+            <p style="margin: 5px 0;"><strong>Address:</strong> <?php echo htmlspecialchars($order['address']); ?></p>
             <p style="margin: 5px 0;"><strong>Scout Name:</strong> <?php echo htmlspecialchars($order['scout_name']); ?></p>
 
             <table class="item-table">
