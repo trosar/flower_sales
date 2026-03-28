@@ -173,11 +173,6 @@ $products = $pdo->query("SELECT * FROM products LIMIT 15")->fetchAll();
             <h3><?php echo htmlspecialchars($p['name']); ?></h3>
             <span class="price">$<?php echo number_format($p['price'], 2); ?></span>
             
-            <!-- <form method="POST">
-                <input type="hidden" name="product_id" value="<?php echo $p['id']; ?>">
-                <input type="number" name="quantity" value="1" min="1" max="9" class="qty-input">
-                <button type="submit" name="add_to_cart" class="btn-add">Add to Cart</button>
-            </form> -->
             <form class="ajax-form">
                 <input type="hidden" name="product_id" value="<?php echo $p['id']; ?>">
                 <input type="number" name="quantity" value="1" min="1" max="9" class="qty-input">

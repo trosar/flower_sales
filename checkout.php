@@ -112,7 +112,8 @@ $grand_total = 0;
 
 
     <?php if (empty($_SESSION['cart'])): ?>
-        <p>Your cart is empty.</p>
+        <p>Your cart is empty.</p><br/>
+        <a href="index.php?<?php echo SID_STR; ?>" class="btn btn-back">Back Home</a>
     <?php else: ?>
         <table>
             <thead>
@@ -217,6 +218,17 @@ document.addEventListener('change', function(e) {
 });
 
 function updateCart(pId, qty, action) {
+
+    if (qty <= 0 && action === 'update') {
+        action = 'remove';
+    }
+    
+    // If user typed something huge, cap it at 9 so it doesn't break PHP logic
+    if (qty > 9) {
+        qty = 9;
+        document.querySelector(`.ajax-qty[data-id="${pId}"]`).value = 9;
+    }
+
     const formData = new FormData();
     formData.append('product_id', pId);
     formData.append('quantity', qty);
