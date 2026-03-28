@@ -62,9 +62,9 @@ $grand_total = 0;
 
 <div class="main-container">
     <h2>Review Your Order</h2>
-        <div class="header">
+        <!-- <div class="header">
     Please double-check the following before placing your order.
-    </div>
+    </div> -->
 
     <div class="review-section">
         <div class="review-label">Customer Name</div>
@@ -115,7 +115,7 @@ $grand_total = 0;
     <div class="btn-group">
         <a href="checkout.php?<?php echo SID_STR; ?>" class="btn btn-back">Back to Cart</a>
         <form action="process_order.php?<?php echo SID_STR; ?>" method="POST" style="flex: 1;">
-            <button type="submit" class="btn btn-confirm" style="width:100%;">Place Order Now</button>
+            <button type="submit" class="btn btn-confirm" style="width:100%;">Place Order</button>
         </form>
     </div>
 </div>

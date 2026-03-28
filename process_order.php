@@ -102,7 +102,7 @@ unset($_SESSION['checkout_details']);
             padding-bottom: 20px;
             text-align: left;
         }
-        h2 { color: var(--primary-color); }
+        h2 { color: var(--primary-color); border-bottom: 2px solid #eee; padding-bottom: 10px; }
         .btn {
             background: var(--primary-color);
             color: white;
@@ -130,18 +130,68 @@ unset($_SESSION['checkout_details']);
             .header { flex-direction: column; gap: 15px; text-align: center; }
         }
 
+        .only-print {
+            display: none !important;
+        }
+
+
+
+        /* This CSS only triggers when the user hits 'Print' */
+        @media print {
+            /* Hide buttons and navigation links */
+            .no-print, .header, .btn {
+                display: none !important;
+            }
+
+            .only-print {
+                display: block !important;
+            }
+
+            /* Remove background colors/shadows to save ink */
+            body {
+                background: white !important;
+                padding: 0;
+            }
+            
+            .main-container {
+                box-shadow: none !important;
+                border: none !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+
+            h1 {
+                color: black !important;
+                font-size: 24pt;
+            }
+
+            /* Ensure the order summary box has a visible border on paper */
+            .order-summary {
+                border: 1px solid #000 !important;
+                background: transparent !important;
+            }
+        }
+
     </style>
 </head>
 <body>
     <div class="main-container">
-        <div class="header">
-            <a href="index.php?<?php echo SID_STR; ?>" style="text-decoration: none; color: var(--primary-color); font-weight: bold;">← Back to Shop</a>
+        <h2>Order Placed</h2>
+        <div class="only-print">
+            <h2>Troop 60 Plant Sale Receipt</h2>
         </div>
         
         <div style="font-size: 60px;">🌸</div>
         <h1>Thanks <?php echo htmlspecialchars($name); ?>!</h1>
         <p>Your order for has been received.</p>
         <p>Your order number is #<?php echo $newOrderId; ?></p>
+<div style="margin-top: 30px;" class="no-print">
+    <button onclick="window.print();" class="btn" style="background: #555; margin-right: 10px; border: none;">
+        Print Receipt
+    </button>
+</div>        
         
         <div class="order-summary">
             <h3 style="margin-top: 0;">Total Amount: $<?php echo number_format($grand_total, 2); ?></h3>
@@ -164,7 +214,7 @@ unset($_SESSION['checkout_details']);
         </div>
         <div style="margin-top: 40px;">
             <a href="index.php?<?php echo SID_STR; ?>" class="btn">Return Home</a>
-        </div>
+        </div>        
     </div>
 </body>
 </html>

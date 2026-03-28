@@ -77,12 +77,17 @@ $grand_total = 0;
         input[type="text"], input[type="email"], select { 
             width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; 
         }
-        .btn-checkout { 
+        .btn { padding: 15px; border-radius: 8px; font-weight: bold; cursor: pointer; text-decoration: none; text-align: center; flex: 1; }
+        .btn-back { background: #eee; color: #333; border: 1px solid #ccc; }
+        .btn-confirm { background: var(--accent-color); color: white; border: none; font-size: 1.1rem; }
+
+        /* .btn-checkout { 
             background: var(--accent-color); color: white; border: none; padding: 15px; 
             width: 100%; border-radius: 8px; font-size: 1.2rem; font-weight: bold; cursor: pointer; margin-top: 20px;
-        }
+        } */
         .btn-checkout:hover { background: #e67300; }
         .total-row { font-size: 1.3rem; font-weight: bold; text-align: right; color: var(--primary-color); }
+        .btn-group { display: flex; gap: 15px; margin-top: 30px; }
         
         @media (max-width: 600px) {
             body { padding: 10px; }
@@ -98,12 +103,12 @@ $grand_total = 0;
     
     <h2>Your Cart</h2>
 
-    <div class="header">
-        <!-- <img src="media/Troop_60_Logo.png" alt="Logo"> -->
+    <!-- <div class="header">
+        <img src="media/Troop_60_Logo.png" alt="Logo">
         <a href="checkout.php" class="cart-badge">
             <a href="index.php?<?php echo SID_STR; ?>" style="text-decoration: none; color: var(--primary-color);">Back to Shopping</a>
         </a>
-    </div>
+    </div> -->
 
 
     <?php if (empty($_SESSION['cart'])): ?>
@@ -173,7 +178,10 @@ $grand_total = 0;
                 <label>Scout's Name (Who gets the credit?)</label>
                 <input type="text" name="scout_name" required value="<?php echo htmlspecialchars($saved['scout_name'] ?? ''); ?>" placeholder="">
             </div>
-            <button type="submit" class="btn-checkout">Review Your Order</button>
+            <div class="btn-group">
+                <a href="index.php?<?php echo SID_STR; ?>" class="btn btn-back">Back Home</a>
+                <button type="submit" class="btn btn-confirm">Review Order</button>
+            </div>
         </form>
     <?php endif; ?>
 </div>

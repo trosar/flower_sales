@@ -53,11 +53,11 @@ if (isset($_SESSION['admin_logged_in'])) {
         header('Content-Type: text/csv');
         header('Content-Disposition: attachment; filename="product_totals_' . date('Y-m-d') . '.csv"');
         $output = fopen('php://output', 'w');
-        fputcsv($output, ['Product Name', 'Total Quantity Ordered']);
-        $sql = "SELECT product_name, SUM(quantity) as total_qty FROM order_items GROUP BY product_name ORDER BY total_qty DESC";
+        fputcsv($output, ['Status', 'Product Name', 'Total Quantity Ordered']);
+        $sql = "SELECT oi.product_name, o.status, SUM(oi.quantity) as total_qty FROM order_items oi LEFT JOIN orders o ON oi.order_id = o.id GROUP BY status, product_name ORDER BY status, product_name";
         $stmt = $pdo->query($sql);
         while ($row = $stmt->fetch()) {
-            fputcsv($output, [$row['product_name'], $row['total_qty']]);
+            fputcsv($output, [$row['status'], $row['product_name'], $row['total_qty']]);
         }
         fclose($output);
         exit;
