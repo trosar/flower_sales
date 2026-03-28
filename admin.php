@@ -116,7 +116,16 @@ if (!isset($_SESSION['admin_logged_in'])): ?>
                 transition: background 0.2s;
             }
             button[name="mark_paid"]:hover { background: #e8f5e9; }
-            button[name="mark_unpaid"]:hover { background: #ffebee; }            
+            button[name="mark_unpaid"]:hover { background: #ffebee; }    
+            input[type="text"], 
+            input[type="password"], 
+            input[type="email"], 
+            input[type="tel"], 
+            input[type="number"], 
+            textarea, 
+            select {
+                font-size: 16px !important;
+            }
         </style>
     </head>
     <body>

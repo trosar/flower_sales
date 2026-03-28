@@ -141,6 +141,16 @@ $products = $pdo->query("SELECT * FROM products order by price desc")->fetchAll(
             .grid { grid-template-columns: 1fr; }
             .header { flex-direction: column; gap: 15px; text-align: center; }
         }
+
+        input[type="text"], 
+        input[type="password"], 
+        input[type="email"], 
+        input[type="tel"], 
+        input[type="number"], 
+        textarea, 
+        select {
+            font-size: 16px !important;
+        }
     </style>
 </head>
 <body>
