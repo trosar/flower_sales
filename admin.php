@@ -3,6 +3,8 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
+date_default_timezone_set('America/Los_Angeles');
+
 // 2. Database & Session (via db.php - this loads your .env automatically)
 require_once 'db.php';
 
@@ -42,7 +44,21 @@ if (isset($_SESSION['admin_logged_in'])) {
         fputcsv($output, ['Order ID', 'Date', 'Customer', 'Address', 'Email', 'Scout', 'Payment', 'Total', 'Status']);
         $stmt = $pdo->query("SELECT * FROM orders ORDER BY order_date DESC");
         while ($row = $stmt->fetch()) {
-            fputcsv($output, [$row['id'], $row['order_date'], $row['customer_name'], $row['address'], $row['email'], $row['scout_name'], $row['payment_mode'], $row['total_amount'], $row['status']]);
+            $date = new DateTime($row['order_date'], new DateTimeZone('UTC'));
+            $date->setTimezone(new DateTimeZone('America/Los_Angeles'));
+            $formattedDate = $date->format('Y-m-d H:i:s');
+
+            fputcsv($output, [
+                $row['id'], 
+                $formattedDate,
+                $row['customer_name'], 
+                $row['address'], 
+                $row['email'], 
+                $row['scout_name'], 
+                $row['payment_mode'], 
+                $row['total_amount'], 
+                $row['status']
+            ]);
         }
         fclose($output);
         exit;
@@ -70,6 +86,14 @@ if (isset($_SESSION['admin_logged_in'])) {
         header("Location: admin.php?" . SID_STR);
         exit;
     }
+
+    // Handle "Mark as Unpaid" (Pending)
+    if (isset($_POST['mark_unpaid'])) {
+        $stmt = $pdo->prepare("UPDATE orders SET status = 'Pending' WHERE id = ?");
+        $stmt->execute([$_POST['order_id']]);
+        header("Location: admin.php?" . SID_STR);
+        exit;
+    }    
 }
 
 // 6. Show Login Page if not logged in
@@ -84,6 +108,15 @@ if (!isset($_SESSION['admin_logged_in'])): ?>
             .login-box { background: white; padding: 40px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); text-align: center; }
             input[type="password"] { padding: 12px; width: 220px; border: 1px solid #ddd; border-radius: 5px; margin-bottom: 15px; }
             .btn-login { background: #2e7d32; color: white; border: none; padding: 12px 25px; border-radius: 5px; cursor: pointer; font-weight: bold; width: 100%; }
+            button[name="mark_paid"], button[name="mark_unpaid"] {
+                border: 1px solid #ccc;
+                background: #fff;
+                padding: 3px 8px;
+                border-radius: 4px;
+                transition: background 0.2s;
+            }
+            button[name="mark_paid"]:hover { background: #e8f5e9; }
+            button[name="mark_unpaid"]:hover { background: #ffebee; }            
         </style>
     </head>
     <body>
@@ -149,16 +182,28 @@ if (!isset($_SESSION['admin_logged_in'])): ?>
             <div class="order-header">
                 <div>
                     <strong>Order #<?php echo $order['id']; ?></strong><br>
-                    <small style="color:#888;"><?php echo date('M j, Y g:i A', strtotime($order['order_date'])); ?></small>
+                    <small style="color:#888;">
+                        <?php 
+                            // Create a DateTime object from the database string (which is UTC)
+                            $date = new DateTime($order['order_date'], new DateTimeZone('UTC'));
+                            // Convert the object to your local timezone (America/Los_Angeles)
+                            $date->setTimezone(new DateTimeZone('America/Los_Angeles'));
+                            echo $date->format('M j, Y g:i A'); 
+                        ?>
+                    </small>
                 </div>
                 <div>
                     <?php if ($order['status'] === 'Paid'): ?>
                         <span class="status-badge status-paid">✅ PAID (<?php echo $order['payment_mode']; ?>)</span>
+                        <form method="POST" style="display:inline; margin-left:10px;">
+                            <input type="hidden" name="order_id" value="<?php echo $order['id']; ?>">
+                            <button type="submit" name="mark_unpaid" style="font-size:0.75rem; cursor:pointer; color: #d32f2f;">Mark Unpaid</button>
+                        </form>
                     <?php else: ?>
                         <span class="status-badge status-pending">⏳ PENDING (<?php echo $order['payment_mode']; ?>)</span>
                         <form method="POST" style="display:inline; margin-left:10px;">
                             <input type="hidden" name="order_id" value="<?php echo $order['id']; ?>">
-                            <button type="submit" name="mark_paid" style="font-size:0.75rem; cursor:pointer;">Mark Paid</button>
+                            <button type="submit" name="mark_paid" style="font-size:0.75rem; cursor:pointer; color: #2e7d32;">Mark Paid</button>
                         </form>
                     <?php endif; ?>
                 </div>

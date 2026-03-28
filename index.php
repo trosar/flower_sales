@@ -153,7 +153,7 @@ $products = $pdo->query("SELECT * FROM products LIMIT 15")->fetchAll();
             Thanks for your support!
         </p>
         <h3>Orders are due by April 16 2026. Delivery will be made on May 1 2026.</h3>
-        <h3 style="vertical-align:top;">Products are Sponsored By: 
+        <h3 style="vertical-align:top;">Products Sponsored By: 
         <a href="https://www.stadiumflowers.com/" target="_blank"><img class="stadium_logo" src="media/Stadium_Flowers_Logo.png" alt="Stadium Flowers Logo"></a>
         </h3>
 
