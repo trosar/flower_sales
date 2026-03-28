@@ -186,12 +186,10 @@ unset($_SESSION['checkout_details']);
         <div style="font-size: 60px;">🌸</div>
         <h1>Thanks <?php echo htmlspecialchars($name); ?>!</h1>
         <p>Your order for has been received.</p>
-        <p>Your order number is #<?php echo $newOrderId; ?></p>
-<div style="margin-top: 30px;" class="no-print">
-    <button onclick="window.print();" class="btn" style="background: #555; margin-right: 10px; border: none;">
-        Print Receipt
-    </button>
-</div>        
+        <p>Your order number is <b>#<?php echo $newOrderId; ?></b></p>
+        <div style="margin-top: 30px;" class="no-print">
+            <p>Please print this page for your records</p>
+        </div>        
         
         <div class="order-summary">
             <h3 style="margin-top: 0;">Total Amount: $<?php echo number_format($grand_total, 2); ?></h3>
