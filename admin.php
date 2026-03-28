@@ -1,0 +1,202 @@
+<?php
+// 1. Error Reporting
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+// 2. Database & Session (via db.php - this loads your .env automatically)
+require_once 'db.php';
+
+// 3. Handle Logout
+if (isset($_GET['logout'])) {
+    // Completely clear the session data
+    $_SESSION = [];
+    session_destroy();
+    
+    // Start a fresh session for the redirect so SID_STR doesn't break
+    session_start();
+    
+    // Redirect to admin, but don't force the OLD sid
+    header("Location: admin.php"); 
+    exit;
+}
+
+// 4. Handle Login using Environment Variable
+if (isset($_POST['password'])) {
+    $admin_password = getenv('ADMIN_PASS');
+    
+    if ($admin_password && $_POST['password'] === $admin_password) {
+        $_SESSION['admin_logged_in'] = true;
+    } else {
+        $error = "Incorrect password!";
+    }
+}
+
+// 5. CSV Export Logic (Must be before any HTML)
+if (isset($_SESSION['admin_logged_in'])) {
+    
+    // Download Order Info (The Customer/Order List)
+    if (isset($_POST['download_orders_csv'])) {
+        header('Content-Type: text/csv');
+        header('Content-Disposition: attachment; filename="order_info_' . date('Y-m-d') . '.csv"');
+        $output = fopen('php://output', 'w');
+        fputcsv($output, ['Order ID', 'Date', 'Customer', 'Email', 'Scout', 'Payment', 'Total', 'Status']);
+        $stmt = $pdo->query("SELECT * FROM orders ORDER BY order_date DESC");
+        while ($row = $stmt->fetch()) {
+            fputcsv($output, [$row['id'], $row['order_date'], $row['customer_name'], $row['email'], $row['scout_name'], $row['payment_mode'], $row['total_amount'], $row['status']]);
+        }
+        fclose($output);
+        exit;
+    }
+
+    // Download Product Orders (The Shopping List)
+    if (isset($_POST['download_products_csv'])) {
+        header('Content-Type: text/csv');
+        header('Content-Disposition: attachment; filename="product_totals_' . date('Y-m-d') . '.csv"');
+        $output = fopen('php://output', 'w');
+        fputcsv($output, ['Product Name', 'Total Quantity Ordered']);
+        $sql = "SELECT product_name, SUM(quantity) as total_qty FROM order_items GROUP BY product_name ORDER BY total_qty DESC";
+        $stmt = $pdo->query($sql);
+        while ($row = $stmt->fetch()) {
+            fputcsv($output, [$row['product_name'], $row['total_qty']]);
+        }
+        fclose($output);
+        exit;
+    }
+
+    // Handle "Mark as Paid"
+    if (isset($_POST['mark_paid'])) {
+        $stmt = $pdo->prepare("UPDATE orders SET status = 'Paid' WHERE id = ?");
+        $stmt->execute([$_POST['order_id']]);
+        header("Location: admin.php?" . SID_STR);
+        exit;
+    }
+}
+
+// 6. Show Login Page if not logged in
+if (!isset($_SESSION['admin_logged_in'])): ?>
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Admin Login</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+            body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background: #f0f2f5; margin: 0; }
+            .login-box { background: white; padding: 40px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); text-align: center; }
+            input[type="password"] { padding: 12px; width: 220px; border: 1px solid #ddd; border-radius: 5px; margin-bottom: 15px; }
+            .btn-login { background: #2e7d32; color: white; border: none; padding: 12px 25px; border-radius: 5px; cursor: pointer; font-weight: bold; width: 100%; }
+        </style>
+    </head>
+    <body>
+        <div class="login-box">
+            <h2>Scout Fundraiser Admin</h2>
+            <?php if (isset($error)) echo "<p style='color:red;'>$error</p>"; ?>
+            <form method="POST">
+                <input type="password" name="password" placeholder="Enter Password" required><br>
+                <button type="submit" class="btn-login">Login</button>
+                <br/><hr/><br/>
+                <a href="index.php">Go to Homepage</a>
+            </form>
+        </div>
+    </body>
+    </html>
+<?php exit; endif; ?>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Order Management</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: sans-serif; background: #f4f4f4; margin: 0; padding: 20px; }
+        .container { max-width: 900px; margin: 0 auto; }
+        .nav-bar { background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .btn { padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; color: white; font-weight: bold; text-decoration: none; display: inline-block; }
+        .btn-green { background: #2e7d32; }
+        .btn-orange { background: #f57c00; }
+        .btn-logout { background: #d32f2f; font-size: 0.8rem; }
+        
+        .order-card { background: white; padding: 20px; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .order-header { display: flex; justify-content: space-between; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-bottom: 15px; }
+        
+        .item-table { width: 100%; border-collapse: collapse; margin: 15px 0; }
+        .item-table th { text-align: left; color: #666; font-size: 0.85rem; border-bottom: 1px solid #eee; padding-bottom: 5px; }
+        .item-table td { padding: 8px 0; border-bottom: 1px solid #fafafa; }
+        
+        .status-badge { padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: bold; }
+        .status-paid { background: #e8f5e9; color: #2e7d32; }
+        .status-pending { background: #fff3e0; color: #ef6c00; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="nav-bar">
+        <div>
+            <h2 style="margin:0;">Order Management</h2>
+            <div style="margin-top:10px;">
+                <form method="POST" style="display:inline;">
+                    <button type="submit" name="download_orders_csv" class="btn btn-green">Download Order Info (CSV)</button>
+                    <button type="submit" name="download_products_csv" class="btn btn-orange">Download Product Orders (CSV)</button>
+                    <a href="?logout=1" class="btn btn-logout">Logout</a>
+                </form>
+            </div>
+        </div>
+        
+    </div>
+
+    <?php
+    $orders = $pdo->query("SELECT * FROM orders ORDER BY order_date DESC")->fetchAll();
+    foreach ($orders as $order): ?>
+        <div class="order-card">
+            <div class="order-header">
+                <div>
+                    <strong>Order #<?php echo $order['id']; ?></strong><br>
+                    <small style="color:#888;"><?php echo date('M j, Y g:i A', strtotime($order['order_date'])); ?></small>
+                </div>
+                <div>
+                    <?php if ($order['status'] === 'Paid'): ?>
+                        <span class="status-badge status-paid">✅ PAID (<?php echo $order['payment_mode']; ?>)</span>
+                    <?php else: ?>
+                        <span class="status-badge status-pending">⏳ PENDING (<?php echo $order['payment_mode']; ?>)</span>
+                        <form method="POST" style="display:inline; margin-left:10px;">
+                            <input type="hidden" name="order_id" value="<?php echo $order['id']; ?>">
+                            <button type="submit" name="mark_paid" style="font-size:0.75rem; cursor:pointer;">Mark Paid</button>
+                        </form>
+                    <?php endif; ?>
+                </div>
+            </div>
+
+            <p style="margin: 5px 0;"><strong>Customer:</strong> <?php echo htmlspecialchars($order['customer_name']); ?> (<?php echo htmlspecialchars($order['email']); ?>)</p>
+            <p style="margin: 5px 0;"><strong>Scout Name:</strong> <?php echo htmlspecialchars($order['scout_name']); ?></p>
+
+            <table class="item-table">
+                <thead>
+                    <tr>
+                        <th>Item Description</th>
+                        <th>Qty</th>
+                        <th style="text-align:right;">Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    $itemStmt = $pdo->prepare("SELECT * FROM order_items WHERE order_id = ?");
+                    $itemStmt->execute([$order['id']]);
+                    while ($item = $itemStmt->fetch()): ?>
+                        <tr>
+                            <td><?php echo htmlspecialchars($item['product_name']); ?></td>
+                            <td><?php echo $item['quantity']; ?></td>
+                            <td style="text-align:right;">$<?php echo number_format($item['subtotal'], 2); ?></td>
+                        </tr>
+                    <?php endwhile; ?>
+                </tbody>
+            </table>
+
+            <div style="text-align: right; font-size: 1.2rem; font-weight: bold; color: #2e7d32;">
+                Total: $<?php echo number_format($order['total_amount'], 2); ?>
+            </div>
+        </div>
+    <?php endforeach; ?>
+</div>
+
+</body>
+</html>
