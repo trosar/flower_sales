@@ -20,7 +20,7 @@ $products = $pdo->query("SELECT * FROM products LIMIT 15")->fetchAll();
 <html>
 <head>
     <title>Scout Fundraiser</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <style>
         :root {
             --primary-color: #2e7d32;
@@ -56,6 +56,7 @@ $products = $pdo->query("SELECT * FROM products LIMIT 15")->fetchAll();
         }
 
         .header img { height: 50px; }
+        .stadium_logo { height: 50px; }
 
         .cart-badge {
             transition: transform 0.2s ease;
@@ -135,6 +136,7 @@ $products = $pdo->query("SELECT * FROM products LIMIT 15")->fetchAll();
 
         /* Mobile Layout: 1 Column */
         @media (max-width: 800px) {
+             body { padding: 10px; }
             .main-container { padding: 20px; }
             .grid { grid-template-columns: 1fr; }
             .header { flex-direction: column; gap: 15px; text-align: center; }
@@ -151,8 +153,8 @@ $products = $pdo->query("SELECT * FROM products LIMIT 15")->fetchAll();
             Thanks for your support!
         </p>
         <h3>Orders are due by April 16 2026. Delivery will be made on May 1 2026.</h3>
-        <h3>Products are Sponsored By: <i>Stadium Flowers</i> | 
-        <a href="https://www.stadiumflowers.com/" target="_blank">stadiumflowers.com</a>
+        <h3 style="vertical-align:top;">Products are Sponsored By: 
+        <a href="https://www.stadiumflowers.com/" target="_blank"><img class="stadium_logo" src="media/Stadium_Flowers_Logo.png" alt="Stadium Flowers Logo"></a>
         </h3>
 
     </div>
@@ -187,8 +189,9 @@ $products = $pdo->query("SELECT * FROM products LIMIT 15")->fetchAll();
     </div>
 
     <div class="footer-nav">
-        <!-- <small><a href="https://www.troop60.co/fundraisers/flower-sales/admin">Admin Login</a></small> -->
-        Thanks for your support!
+        <h3>Products are Sponsored By: 
+        <a href="https://www.stadiumflowers.com/" target="_blank"><img class="stadium_logo" src="media/Stadium_Flowers_Logo.png" alt="Stadium Flowers Logo"></a>
+        </h3>
     </div>
 
 </div>

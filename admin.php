@@ -93,8 +93,6 @@ if (!isset($_SESSION['admin_logged_in'])): ?>
             <form method="POST">
                 <input type="password" name="password" placeholder="Enter Password" required><br>
                 <button type="submit" class="btn-login">Login</button>
-                <br/><hr/><br/>
-                <a href="index.php">Go to Homepage</a>
             </form>
         </div>
     </body>
@@ -105,7 +103,7 @@ if (!isset($_SESSION['admin_logged_in'])): ?>
 <html>
 <head>
     <title>Order Management</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <style>
         body { font-family: sans-serif; background: #f4f4f4; margin: 0; padding: 20px; }
         .container { max-width: 900px; margin: 0 auto; }

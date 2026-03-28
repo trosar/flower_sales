@@ -72,7 +72,7 @@ unset($_SESSION['checkout_details']);
 <html>
 <head>
     <title>Order Confirmed</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <style>
         :root {
             --primary-color: #2e7d32;
@@ -86,8 +86,9 @@ unset($_SESSION['checkout_details']);
             padding: 20px;
             color: #333;
         }
+        /* The Main Bordered Container */
         .main-container {
-            max-width: 800px;
+            max-width: 1000px; /* Changed from 1100px */
             margin: 0 auto;
             background: white;
             padding: 40px;
@@ -120,6 +121,15 @@ unset($_SESSION['checkout_details']);
             margin: 20px 0;
             border: 1px dashed #ccc;
         }
+        /* Mobile Layout: 1 Column */
+        @media (max-width: 800px) {
+            body { padding: 10px; }
+            .order-summary { padding: 2px; }
+            .main-container { padding: 20px; }
+            .grid { grid-template-columns: 1fr; }
+            .header { flex-direction: column; gap: 15px; text-align: center; }
+        }
+
     </style>
 </head>
 <body>

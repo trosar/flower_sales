@@ -25,11 +25,11 @@ $grand_total = 0;
 <html>
 <head>
     <title>Confirm Your Order</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <style>
         :root { --primary-color: #2e7d32; --accent-color: #f57c00; }
         body { font-family: sans-serif; background: #f9f9f9; padding: 20px; }
-        .container { max-width: 1000px; margin: 0 auto; background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+        .main-container { max-width: 1000px; margin: 0 auto; background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
         .review-section { border-bottom: 1px solid #eee; padding: 15px 0; }
         .review-label { font-weight: bold; color: #666; font-size: 0.9rem; }
         .review-value { font-size: 1.1rem; margin-top: 5px; }
@@ -51,12 +51,16 @@ $grand_total = 0;
         }
 
         .header img { height: 70px; }        
+        @media (max-width: 600px) {
+            body { padding: 10px; }
+            .main-container { padding: 20px; }
+        }
 
     </style>
 </head>
 <body>
 
-<div class="container">
+<div class="main-container">
     <h2>Review Your Order</h2>
         <div class="header">
     Please double-check the following before placing your order.

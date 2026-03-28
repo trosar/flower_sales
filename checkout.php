@@ -32,8 +32,8 @@ $grand_total = 0;
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Checkout - Scout Fundraiser</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <style>
         :root {
             --primary-color: #2e7d32;
@@ -42,7 +42,7 @@ $grand_total = 0;
         }
         body { font-family: sans-serif; background-color: var(--bg-color); margin: 0; padding: 20px; color: #333; }
         
-        .container {
+        .main-container {
             max-width: 1000px; /* Changed from 800px */
             margin: 0 auto;
             background: white;
@@ -85,14 +85,15 @@ $grand_total = 0;
         .total-row { font-size: 1.3rem; font-weight: bold; text-align: right; color: var(--primary-color); }
         
         @media (max-width: 600px) {
-            .container { padding: 15px; }
+            body { padding: 10px; }
+            .main-container { padding: 20px; }
             td, th { padding: 8px; font-size: 0.9rem; }
         }
     </style>
 </head>
 <body>
 
-<div class="container">
+<div class="main-container">
 
     
     <h2>Your Cart</h2>
