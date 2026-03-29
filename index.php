@@ -138,7 +138,7 @@ $products = $pdo->query("SELECT * FROM products order by price desc")->fetchAll(
         @media (max-width: 800px) {
              body { padding: 10px; }
             .main-container { padding: 20px; }
-            .grid { grid-template-columns: repeat(2, 1fr); }
+            .grid { grid-template-columns: 1fr; }
             .header { flex-direction: column; gap: 15px; text-align: center; }
             .product-card img {
                 height: 150px;
