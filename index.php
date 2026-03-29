@@ -82,7 +82,7 @@ $products = $pdo->query("SELECT * FROM products order by price desc")->fetchAll(
         /* Product Grid */
         .grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(4, 1fr);
             gap: 30px;
         }
 
@@ -98,7 +98,7 @@ $products = $pdo->query("SELECT * FROM products order by price desc")->fetchAll(
 
         .product-card img {
             width: 100%;
-            height: 250px;
+            height: 200px;
             object-fit: cover;
             border-radius: 6px;
             margin-bottom: 15px;
@@ -138,8 +138,14 @@ $products = $pdo->query("SELECT * FROM products order by price desc")->fetchAll(
         @media (max-width: 800px) {
              body { padding: 10px; }
             .main-container { padding: 20px; }
-            .grid { grid-template-columns: 1fr; }
+            .grid { grid-template-columns: repeat(2, 1fr); }
             .header { flex-direction: column; gap: 15px; text-align: center; }
+            .product-card img {
+                height: 150px;
+                object-fit: cover;
+                border-radius: 6px;
+                margin-bottom: 15px;
+            }
         }
 
         input[type="text"], 
@@ -190,12 +196,11 @@ $products = $pdo->query("SELECT * FROM products order by price desc")->fetchAll(
         </div>
         <?php endforeach; ?>
     </div>
-    <hr/>
-
     <div class="footer-nav">
+        <hr/>
         <div style="text-align: right; margin-bottom: 10px;">
             <small>
-            <span id="thanks">Thanks for your support!</span>    
+            <span id="thanks">Thanks for your support!</span><br/>    
             <a href="view_order.php?<?php echo SID_STR; ?>">
                 Look Up Your Orders
             </a>
