@@ -196,8 +196,8 @@ $products = $pdo->query("SELECT * FROM products order by price desc")->fetchAll(
         <div style="text-align: right; margin-bottom: 10px;">
             <small>
             <span id="thanks">Thanks for your support!</span>    
-            <a href="view_order.php">
-                Look Up Your Order
+            <a href="view_order.php?<?php echo SID_STR; ?>">
+                Look Up Your Orders
             </a>
             |
             <a href="admin.php">Admin Login</a></small>
