@@ -173,8 +173,6 @@ $products = $pdo->query("SELECT * FROM products order by price desc")->fetchAll(
         <a href="checkout.php?<?php echo SID_STR; ?>" class="cart-badge" id="cart-anchor">
             View Cart (<span id="cart-qty"><?php echo $cart_count; ?></span>)
         </a>
-
-
     </div>
     <div class="grid">
         <?php foreach ($products as $p): ?>
@@ -192,15 +190,23 @@ $products = $pdo->query("SELECT * FROM products order by price desc")->fetchAll(
         </div>
         <?php endforeach; ?>
     </div>
+    <hr/>
 
     <div class="footer-nav">
-        <h3>Products are Sponsored By: 
-        <a href="https://www.stadiumflowers.com/" target="_blank"><img class="stadium_logo" src="media/Stadium_Flowers_Logo.png" alt="Stadium Flowers Logo"></a>
-        </h3>
-        <br/>
-        <small><a href="admin.php">Admin Login</a></small> |
-        <span id="thanks">Thanks for your support!</span>
+        <div style="text-align: right; margin-bottom: 10px;">
+            <small>
+            <span id="thanks">Thanks for your support!</span>    
+            <a href="view_order.php">
+                Look Up Your Order
+            </a>
+            |
+            <a href="admin.php">Admin Login</a></small>
+        </div>    
+        <hr/>
         </br/>
+        <h3>Products are Sponsored By: 
+            <a href="https://www.stadiumflowers.com/" target="_blank"><img class="stadium_logo" src="media/Stadium_Flowers_Logo.png" alt="Stadium Flowers Logo"></a>
+        </h3>
 
     </div>
     <div id="credit-popup" style="display:none; position:fixed; bottom:20px; right:20px; background:#2e7d32; color:white; padding:10px 20px; border-radius:30px; box-shadow:0 4px 10px rgba(0,0,0,0.2); font-weight:bold; z-index:9999;">

@@ -42,7 +42,7 @@ if (isset($_SESSION['admin_logged_in'])) {
         header('Content-Disposition: attachment; filename="order_info_' . date('Y-m-d') . '.csv"');
         $output = fopen('php://output', 'w');
         fputcsv($output, ['Order ID', 'Date', 'Customer', 'Address', 'Email', 'Scout', 'Payment', 'Total', 'Status']);
-        $stmt = $pdo->query("SELECT * FROM orders ORDER BY order_date DESC");
+        $stmt = $pdo->query("SELECT * FROM orders where status != 'Cancelled' ORDER BY order_date DESC");
         while ($row = $stmt->fetch()) {
             $date = new DateTime($row['order_date'], new DateTimeZone('UTC'));
             $date->setTimezone(new DateTimeZone('America/Los_Angeles'));
@@ -148,11 +148,12 @@ if (!isset($_SESSION['admin_logged_in'])): ?>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <style>
         body { font-family: sans-serif; background: #f4f4f4; margin: 0; padding: 20px; }
-        .container { max-width: 900px; margin: 0 auto; }
+        .container { max-width: 1000px; margin: 0 auto; }
         .nav-bar { background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
         .btn { padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; color: white; font-weight: bold; text-decoration: none; display: inline-block; }
         .btn-green { background: #2e7d32; }
         .btn-orange { background: #f57c00; }
+        .btn-purple { background: #673ab7; font-size: 0.8rem; }
         .btn-logout { background: #d32f2f; font-size: 0.8rem; }
         
         .order-card { background: white; padding: 20px; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
@@ -177,6 +178,7 @@ if (!isset($_SESSION['admin_logged_in'])): ?>
                 <form method="POST" style="display:inline;">
                     <button type="submit" name="download_orders_csv" class="btn btn-green">Download Order Info (CSV)</button>
                     <button type="submit" name="download_products_csv" class="btn btn-orange">Download Product Orders (CSV)</button>
+                    <a href="reports.php?<?php echo SID_STR; ?>" class="btn btn-purple">View Scout Reports</a>
                     <a href="?logout=1" class="btn btn-logout">Logout</a>
                 </form>
             </div>
@@ -185,7 +187,7 @@ if (!isset($_SESSION['admin_logged_in'])): ?>
     </div>
 
     <?php
-    $orders = $pdo->query("SELECT * FROM orders ORDER BY order_date DESC")->fetchAll();
+    $orders = $pdo->query("SELECT * FROM orders where status != 'Cancelled'ORDER BY order_date DESC")->fetchAll();
     foreach ($orders as $order): ?>
         <div class="order-card">
             <div class="order-header">
