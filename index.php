@@ -203,9 +203,11 @@ $products = $pdo->query("SELECT * FROM products order by price desc")->fetchAll(
         </br/>
 
     </div>
+    <div id="credit-popup" style="display:none; position:fixed; bottom:20px; right:20px; background:#2e7d32; color:white; padding:10px 20px; border-radius:30px; box-shadow:0 4px 10px rgba(0,0,0,0.2); font-weight:bold; z-index:9999;">
+        Built with ❤️ by Alan Rosario
+    </div>
 
 </div>
-
 <script>
 document.querySelectorAll('.ajax-form').forEach(form => {
     form.addEventListener('submit', function(e) {
@@ -256,8 +258,15 @@ document.querySelectorAll('.ajax-form').forEach(form => {
         });
     });
 });
-document.getElementById('thanks').addEventListener('dblclick', function() {
-    alert('Built with ❤️ by Alan Rosario');
+
+let tapCount = 0;
+document.getElementById('thanks').addEventListener('click', function() {
+    tapCount++;
+    if (tapCount === 3) { // Shows up after 3 fast clicks
+        const popup = document.getElementById('credit-popup');
+        popup.style.display = 'block';
+        setTimeout(() => { popup.style.display = 'none'; tapCount = 0; }, 3000);
+    }
 });
 </script>
 </body>
