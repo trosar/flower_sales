@@ -198,8 +198,10 @@ $products = $pdo->query("SELECT * FROM products order by price desc")->fetchAll(
         <a href="https://www.stadiumflowers.com/" target="_blank"><img class="stadium_logo" src="media/Stadium_Flowers_Logo.png" alt="Stadium Flowers Logo"></a>
         </h3>
         <br/>
-        <small><a href="admin.php">Admin Login</a></small>
+        <small><a href="admin.php">Admin Login</a></small> |
+        <span id="thanks">Thanks for your support!</span>
         </br/>
+
     </div>
 
 </div>
@@ -253,6 +255,9 @@ document.querySelectorAll('.ajax-form').forEach(form => {
             }, 800);
         });
     });
+});
+document.getElementById('thanks').addEventListener('dblclick', function() {
+    alert('Built with ❤️ by Alan Rosario');
 });
 </script>
 </body>
