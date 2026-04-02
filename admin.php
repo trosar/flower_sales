@@ -121,11 +121,15 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
             .btn-login { background: var(--accent-color); color: white; border: none; }
 
             button[name="mark_paid"], button[name="mark_unpaid"] {
+                appearance: none;          /* Removes system-default styling */
+                -webkit-appearance: none;   /* Specific fix for Safari/iOS */
+                background-color: #ccc !important;
                 border: 1px solid #ccc;
-                background: #fff;
                 padding: 3px 8px;
-                border-radius: 4px;
-                transition: background 0.2s;
+                border-radius: 2px;
+                font-size: 0.75rem;
+                cursor: pointer;
+                color: inherit;
             }
             button[name="mark_paid"]:hover { background: #e8f5e9; }
             button[name="mark_unpaid"]:hover { background: #ffebee; }    
@@ -225,13 +229,13 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
                         <span class="status-badge status-paid">✅ PAID (<?php echo $order['payment_mode']; ?>)</span>
                         <form method="POST" style="display:inline; margin-left:10px;">
                             <input type="hidden" name="order_id" value="<?php echo $order['id']; ?>">
-                            <button type="submit" name="mark_unpaid" style="font-size:0.75rem; cursor:pointer; color: #d32f2f;">Mark Unpaid</button>
+                            <button type="submit" name="mark_unpaid" style="background: #ccc; color: #d32f2f;">Mark Unpaid</button>
                         </form>
                     <?php else: ?>
                         <span class="status-badge status-pending">⏳ PENDING (<?php echo $order['payment_mode']; ?>)</span>
                         <form method="POST" style="display:inline; margin-left:10px;">
                             <input type="hidden" name="order_id" value="<?php echo $order['id']; ?>">
-                            <button type="submit" name="mark_paid" style="font-size:0.75rem; cursor:pointer; color: #2e7d32;">Mark Paid</button>
+                            <button type="submit" name="mark_paid" style="background: #ccc; color: #2e7d32;">Mark Paid</button>
                         </form>
                     <?php endif; ?>
                 </div>
