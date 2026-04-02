@@ -4,7 +4,6 @@ date_default_timezone_set('America/Los_Angeles');
 
 // Security Check
 if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
-    session_destroy();
     header("Location: admin.php");
     exit;
 }

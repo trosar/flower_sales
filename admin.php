@@ -11,12 +11,15 @@ require_once 'db.php';
 // 3. Handle Logout
 if (isset($_GET['logout'])) {
     // Completely clear the session data
-    $_SESSION = [];
+    $_SESSION = array();
     session_destroy();
-    
-    // Start a fresh session for the redirect so SID_STR doesn't break
-    session_start();
-    
+    if (ini_get("session.use_cookies")) {
+        $params = session_get_cookie_params();
+        setcookie(session_name(), '', time() - 42000,
+            $params["path"], $params["domain"],
+            $params["secure"], $params["httponly"]
+        );
+    }    
     // Redirect to admin, but don't force the OLD sid
     header("Location: admin.php"); 
     exit;
@@ -105,10 +108,18 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
         <title>Admin Login</title>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
         <style>
+            :root {
+                --primary-color: #2e7d32;
+                --accent-color: #f57c00;
+                --bg-color: #f9f9f9;
+            }
             body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background: #f0f2f5; margin: 0; }
             .login-box { background: white; padding: 40px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); text-align: center; }
             input[type="password"] { padding: 12px; width: 220px; border: 1px solid #ddd; border-radius: 5px; margin-bottom: 15px; }
-            .btn-login { background: #2e7d32; color: white; border: none; padding: 12px 25px; border-radius: 5px; cursor: pointer; font-weight: bold; width: 100%; }
+            .btn { padding: 15px; border-radius: 8px; font-weight: bold; cursor: pointer; text-decoration: none; text-align: center; flex: 1; font-size: 0.8rem; }
+            .btn-back { background: #eee; color: #333; border: 1px solid #ccc; }
+            .btn-login { background: var(--accent-color); color: white; border: none; }
+
             button[name="mark_paid"], button[name="mark_unpaid"] {
                 border: 1px solid #ccc;
                 background: #fff;
@@ -135,7 +146,8 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
             <?php if (isset($error)) echo "<p style='color:red;'>$error</p>"; ?>
             <form method="POST">
                 <input type="password" name="password" placeholder="Enter Password" required><br>
-                <button type="submit" class="btn-login">Login</button>
+                <button type="submit" class="btn btn-login">Login</button>
+                <a href="index.php?<?php echo SID_STR; ?>" class="btn btn-back">Back Home</a>
             </form>
         </div>
     </body>
