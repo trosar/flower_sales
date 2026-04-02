@@ -3,7 +3,8 @@ require_once 'db.php';
 date_default_timezone_set('America/Los_Angeles');
 
 // Security Check
-if (!isset($_SESSION['admin_logged_in'])) {
+if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
+    session_destroy();
     header("Location: admin.php");
     exit;
 }
@@ -55,38 +56,56 @@ $troopTotal = $pdo->query("SELECT SUM(total_amount) FROM orders where status != 
         body { font-family: sans-serif; background: #f4f4f4; margin: 0; padding: 20px; }
         .container { max-width: 1000px; margin: 0 auto; }
         .nav-bar { background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .btn { padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; color: white; font-weight: bold; text-decoration: none; display: inline-block; font-size: 0.8rem; }
+        .btn-green { background: #2e7d32; }
+        .btn-orange { background: #f57c00; }
+        .btn-purple { background: #673ab7; }
+        .btn-back { background: #666; }
+
         .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 30px; }
         table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.9rem; }
         th { background: #673ab7; color: white; padding: 2px; text-align: left; }
         td { padding: 2px; border-bottom: 1px solid #eee; }
         .scout-header { background: #f3e5f5; font-weight: bold; font-size: 1.1rem; }
         .scout-header-tr { padding: 2px; border-top: 4px solid #C8B6F0; background: #C8B6F0; color: black; }
-        .btn { padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: bold; border: none; cursor: pointer; color: white; }
-        .btn-purple { background: #673ab7; }
-        .btn-back { background: #666;  font-size: 0.8rem; }
         .status-paid { color: #2e7d32; font-weight: bold; }
         .status-pending { color: #f57c00; font-weight: bold; }
+
+        /* --- Leaderboard Container Fix --- */
         .leaderboard-container {
             display: flex;
-            gap: 20px;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap; /* Essential for mobile stacking */
         }
+
         .leaderboard-card {
             background: white;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            flex: 1;
-            min-width: 300px;
+            flex: 1 1 300px; /* Grow, Shrink, and a 300px base */
+            min-width: 0; /* Prevents overflow in flexbox */
         }
-        .leader-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px 0;
-            border-bottom: 1px solid #eee;
+
+        /* --- Responsive Media Query --- */
+        @media (max-width: 600px) {
+            body { padding: 10px; }
+            
+
+            .leaderboard-card {
+                flex: 1 1 100%; /* Take full width on small screens */
+            }
+
+            .leader-row {
+                font-size: 0.85rem; /* Shrink text slightly to fit names */
+            }
+            
+            /* Hide some detail on mobile leaderboard to save space */
+            .leader-row span[style*="color: #888"] {
+                display: none; 
+            }
         }
-        .leader-row:last-child { border-bottom: none; }
         .rank { font-weight: bold; color: #673ab7; margin-right: 10px; }
         .scout-name { flex-grow: 1; }
         .sales-amount { font-weight: bold; color: #2e7d32; }        
@@ -128,19 +147,18 @@ $troopTotal = $pdo->query("SELECT SUM(total_amount) FROM orders where status != 
     </style>
 </head>
 <body>
-
-<div class="container">
+    <div class="container">
     <div class="nav-bar no-print">
         <div>
             <h2 style="margin:0;">Scout Sales Report</h2>
             <div style="margin-top:10px;">
-                <form method="POST" style="display:inline;">
+                <form method="POST" style="width: 100%; display: contents;">
                     <button type="submit" name="download_scout_report_csv" class="btn btn-purple">Download Report (CSV)</button>
+                    <button type="button" onclick="downloadPrintableHTML()" class="btn btn-green">Download Report</button>                    
                     <a href="admin.php?<?php echo SID_STR; ?>" class="btn btn-back">Back to Admin</a>
                 </form>
             </div>
         </div>
-        
     </div>
 
     <div class="leaderboard-container no-print">
@@ -245,5 +263,67 @@ $troopTotal = $pdo->query("SELECT SUM(total_amount) FROM orders where status != 
     </div>
 </div>
 
+<script>
+function downloadPrintableHTML() {
+    // 1. Get all the CSS from the current page
+    const styles = Array.from(document.styleSheets)
+        .map(styleSheet => {
+            try {
+                return Array.from(styleSheet.cssRules)
+                    .map(rule => rule.cssText)
+                    .join('');
+            } catch (e) {
+                return ''; // Handle cross-origin issues if any
+            }
+        })
+        .join('');
+
+    // 2. Get the main content (the .container div)
+    const content = document.querySelector('.container').innerHTML;
+
+    // 3. Construct a full HTML document string
+    const htmlContent = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Troop 60 - Scout Sales Report</title>
+            <style>
+                ${styles}
+                /* Ensure it opens in "Print Mode" appearance */
+                body { background: white !important; }
+                .no-print { display: none !important; }
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                ${content}
+            </div>
+            <script>
+                // Optional: Auto-open print dialog when they open the file
+                // window.print();
+            <\/script>
+        </body>
+        </html>
+    `;
+
+    // 4. Create the download link
+    const blob = new Blob([htmlContent], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    
+    // Name the file with today's date
+    const date = new Date().toISOString().split('T')[0];
+    a.href = url;
+    a.download = 'Scout_Report_' + date + '.html';
+    
+    // Trigger the download
+    document.body.appendChild(a);
+    a.click();
+    
+    // Cleanup
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+</script>
 </body>
 </html>

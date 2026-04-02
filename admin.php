@@ -34,7 +34,7 @@ if (isset($_POST['password'])) {
 }
 
 // 5. CSV Export Logic (Must be before any HTML)
-if (isset($_SESSION['admin_logged_in'])) {
+if (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true) {
     
     // Download Order Info (The Customer/Order List)
     if (isset($_POST['download_orders_csv'])) {
@@ -97,7 +97,8 @@ if (isset($_SESSION['admin_logged_in'])) {
 }
 
 // 6. Show Login Page if not logged in
-if (!isset($_SESSION['admin_logged_in'])): ?>
+if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true): ?>
+
     <!DOCTYPE html>
     <html>
     <head>
@@ -150,11 +151,11 @@ if (!isset($_SESSION['admin_logged_in'])): ?>
         body { font-family: sans-serif; background: #f4f4f4; margin: 0; padding: 20px; }
         .container { max-width: 1000px; margin: 0 auto; }
         .nav-bar { background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-        .btn { padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; color: white; font-weight: bold; text-decoration: none; display: inline-block; }
+        .btn { padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; color: white; font-weight: bold; text-decoration: none; display: inline-block; ; font-size: 0.8rem; }
         .btn-green { background: #2e7d32; }
         .btn-orange { background: #f57c00; }
-        .btn-purple { background: #673ab7; font-size: 0.8rem; }
-        .btn-logout { background: #d32f2f; font-size: 0.8rem; }
+        .btn-purple { background: #673ab7; }
+        .btn-logout { background: #d32f2f;}
         
         .order-card { background: white; padding: 20px; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
         .order-header { display: flex; justify-content: space-between; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-bottom: 15px; }
@@ -166,6 +167,10 @@ if (!isset($_SESSION['admin_logged_in'])): ?>
         .status-badge { padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: bold; }
         .status-paid { background: #e8f5e9; color: #2e7d32; }
         .status-pending { background: #fff3e0; color: #ef6c00; }
+        @media (max-width: 600px) {
+            body { padding: 10px; }
+        }
+
     </style>
 </head>
 <body>
@@ -175,7 +180,7 @@ if (!isset($_SESSION['admin_logged_in'])): ?>
         <div>
             <h2 style="margin:0;">Order Management</h2>
             <div style="margin-top:10px;">
-                <form method="POST" style="display:inline;">
+                <form method="POST" style="width: 100%; display: contents;">
                     <button type="submit" name="download_orders_csv" class="btn btn-green">Download Order Info (CSV)</button>
                     <button type="submit" name="download_products_csv" class="btn btn-orange">Download Product Orders (CSV)</button>
                     <a href="reports.php?<?php echo SID_STR; ?>" class="btn btn-purple">View Scout Reports</a>
