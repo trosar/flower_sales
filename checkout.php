@@ -186,9 +186,13 @@ $grand_total = 0;
                 <input type="email" name="email" required value="<?php echo htmlspecialchars($saved['email'] ?? ''); ?>" placeholder="">
             </div>
             <div class="form-group">
-                <label>Scout's Name (Who gets the credit?)</label>
+                <label>Scout's Name</label>
                 <input type="text" name="scout_name" required value="<?php echo htmlspecialchars($saved['scout_name'] ?? ''); ?>" placeholder="">
             </div>
+            <div class="form-group" style="margin-bottom: 15px;">
+                <label>Comments (Optional)</label>
+                <input type="text" name="comments" id="comments" value="<?php echo htmlspecialchars($saved['comments'] ?? ''); ?>" placeholder="">
+            </div>            
             <div class="btn-group">
                 <a href="index.php?<?php echo SID_STR; ?>" class="btn btn-back">Back Home</a>
                 <button type="submit" class="btn btn-confirm">Review Order</button>

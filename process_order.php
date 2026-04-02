@@ -15,8 +15,8 @@ $name    = htmlspecialchars($details['name']);
 $email   = htmlspecialchars($details['email']);
 $scout_name   = htmlspecialchars($details['scout_name']);
 $payment = $details['payment'];
-// If you aren't using an address field anymore, we can default it or remove it
-$address = isset($details['address']) ? htmlspecialchars($details['address']) : 'N/A';
+$address = htmlspecialchars($details['address']);
+$comments = isset($details['comments']) ? htmlspecialchars($details['comments']) : 'N/A';
 
 // 2. Calculate Grand Total and Prepare Items
 $grand_total = 0;
@@ -41,10 +41,10 @@ foreach ($_SESSION['cart'] as $id => $qty) {
 }
 
 // 3. Insert Main Order
-$sqlOrder = "INSERT INTO orders (customer_name, address, email, scout_name, payment_mode, total_amount) 
-             VALUES (?, ?, ?, ?, ?, ?)";
+$sqlOrder = "INSERT INTO orders (customer_name, address, email, scout_name, payment_mode, total_amount, comments) 
+             VALUES (?, ?, ?, ?, ?, ?, ?)";
 $stmtOrder = $pdo->prepare($sqlOrder);
-$stmtOrder->execute([$name, $address, $email, $scout_name, $payment, $grand_total]);
+$stmtOrder->execute([$name, $address, $email, $scout_name, $payment, $grand_total, $comments]);
 
 $newOrderId = $pdo->lastInsertId(); 
 
@@ -188,7 +188,8 @@ unset($_SESSION['checkout_details']);
         <p>Your order for has been received.</p>
         <p>Your order number is <b>#<?php echo $newOrderId; ?></b></p>
         <div style="margin-top: 30px;" class="no-print">
-            <p>Please print this page for your records</p>
+            <p>Please print this page for your records. 
+                You can lookup your order details in <a href="view_order.php?<?php echo SID_STR; ?>&email=<?php echo htmlspecialchars($email); ?>" target="_blank">this page</a></p>
         </div>        
         
         <div class="order-summary">

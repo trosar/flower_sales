@@ -3,6 +3,7 @@ require_once 'db.php';
 date_default_timezone_set('America/Los_Angeles');
 
 $email_query = $_GET['email'] ?? '';
+$email_query = trim($email_query);
 $orders = [];
 
 if ($email_query) {
@@ -15,7 +16,7 @@ if ($email_query) {
 <!DOCTYPE html>
 <html>
 <head>
-    <title>View Your Orders</title>
+    <title>View Your Orders <?php echo htmlspecialchars($email_query); ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <style>
         :root { --primary: #2e7d32; --accent: #f57c00; }
@@ -42,7 +43,9 @@ if ($email_query) {
         <form method="GET" action="view_order.php">
             <input type="hidden" name="sid" value="<?php echo session_id(); ?>">
             
-            <input type="email" name="email" placeholder="Enter the email used for order" required value="<?php echo htmlspecialchars($email_query); ?>">
+            <input type="email" name="email" 
+                placeholder="Enter the email used for order" 
+                required value="<?php echo htmlspecialchars($email_query); ?>">
             <br>
             <button type="submit" class="btn">Find My Orders</button>
         </form>

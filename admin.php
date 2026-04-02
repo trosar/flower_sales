@@ -44,7 +44,7 @@ if (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true
         header('Content-Type: text/csv');
         header('Content-Disposition: attachment; filename="order_info_' . date('Y-m-d') . '.csv"');
         $output = fopen('php://output', 'w');
-        fputcsv($output, ['Order ID', 'Date', 'Customer', 'Address', 'Email', 'Scout', 'Payment', 'Total', 'Status']);
+        fputcsv($output, ['Order ID', 'Date', 'Customer', 'Address', 'Email', 'Scout', 'Payment', 'Total', 'Status', 'Comments']);
         $stmt = $pdo->query("SELECT * FROM orders where status != 'Cancelled' ORDER BY order_date DESC");
         while ($row = $stmt->fetch()) {
             $date = new DateTime($row['order_date'], new DateTimeZone('UTC'));
@@ -60,7 +60,8 @@ if (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true
                 $row['scout_name'], 
                 $row['payment_mode'], 
                 $row['total_amount'], 
-                $row['status']
+                $row['status'],
+                $row['comments']
             ]);
         }
         fclose($output);
@@ -141,6 +142,11 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
             textarea, 
             select {
                 font-size: 16px !important;
+            }
+            .order-comments {
+                margin: 10px 0; padding: 10px; 
+                background: #fffde7; border-left: 4px solid #fdd835; 
+                font-size: 0.9rem;
             }
         </style>
     </head>
@@ -244,6 +250,11 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
             <p style="margin: 5px 0;"><strong>Customer:</strong> <?php echo htmlspecialchars($order['customer_name']); ?> (<?php echo htmlspecialchars($order['email']); ?>)</p>
             <p style="margin: 5px 0;"><strong>Address:</strong> <?php echo htmlspecialchars($order['address']); ?></p>
             <p style="margin: 5px 0;"><strong>Scout Name:</strong> <?php echo htmlspecialchars($order['scout_name']); ?></p>
+            <?php if (!empty($order['comments'])): ?>
+                <p class="order-comments">
+                    <strong>Comments:</strong> <?php echo htmlspecialchars($order['comments']); ?>
+                </p>
+            <?php endif; ?>            
 
             <table class="item-table">
                 <thead>

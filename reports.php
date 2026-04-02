@@ -13,10 +13,10 @@ if (isset($_POST['download_scout_report_csv'])) {
     header('Content-Type: text/csv');
     header('Content-Disposition: attachment; filename="scout_sales_' . date('Y-m-d') . '.csv"');
     $output = fopen('php://output', 'w');
-    fputcsv($output, ['Scout', 'Customer', 'Address', 'Product', 'Qty', 'Subtotal', 'Status', 'Date']);
+    fputcsv($output, ['Scout', 'Customer', 'Address', 'Product', 'Qty', 'Subtotal', 'Status', 'Payment Mode', 'Order Date', 'Comments']);
     
     $sql = "SELECT o.scout_name, o.customer_name, o.address, oi.product_name, oi.quantity, 
-                   oi.subtotal, o.status, o.order_date 
+                   oi.subtotal, o.status, o.payment_mode, o.order_date, o.comments
             FROM order_items oi 
             LEFT JOIN orders o ON oi.order_id = o.id 
             ORDER BY o.scout_name ASC, o.order_date DESC";
@@ -26,7 +26,7 @@ if (isset($_POST['download_scout_report_csv'])) {
         fputcsv($output, [
             $row['scout_name'], $row['customer_name'], $row['address'], 
             $row['product_name'], $row['quantity'], $row['subtotal'], 
-            $row['status'], $row['order_date']
+            $row['status'], $row['payment_mode'], $row['order_date'], $row['comments']
         ]);
     }
     fclose($output);
@@ -193,7 +193,8 @@ $troopTotal = $pdo->query("SELECT SUM(total_amount) FROM orders where status != 
             <tbody>
                 <?php
                 $sql = "SELECT o.scout_name, o.id as order_id, o.customer_name, o.email, o.address, 
-                            o.status, o.order_date, oi.product_name, oi.quantity, 
+                            o.status, o.payment_mode, o.order_date, o.comments,
+                            oi.product_name, oi.quantity, 
                             (oi.subtotal/oi.quantity) as price_per_item, oi.subtotal 
                         FROM order_items oi 
                         LEFT JOIN orders o ON oi.order_id = o.id 
@@ -231,12 +232,17 @@ $troopTotal = $pdo->query("SELECT SUM(total_amount) FROM orders where status != 
                                     <small style="color: #666;">(<?php echo htmlspecialchars($row['email']); ?>)</small>
                                 </span>
                                 <span class="<?php echo ($row['status'] === 'Paid') ? 'status-paid' : 'status-pending'; ?>">
-                                    <?php echo $row['status']; ?>
+                                    <?php echo $row['status']; ?> (<?php echo $row['payment_mode']; ?>)
                                 </span>
                             </div>
                             <div style="font-size: 0.85rem; color: #555; margin-top: 4px;">
                                 📍 <?php echo htmlspecialchars($row['address']); ?> | 📅 <?php echo $orderDate; ?>
                             </div>
+                            <?php if (!empty($row['comments'])): ?>
+                                <div style="font-size: 0.85rem; padding: 5px;">
+                                    <strong>💬 Note:</strong> <?php echo htmlspecialchars($row['comments']); ?>
+                                </div>
+                            <?php endif; ?>                            
                         </td>
                     </tr>
                     <tr style="font-size: 0.8rem; color: #666;">

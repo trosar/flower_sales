@@ -8,7 +8,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'email'      => $_POST['email'] ?? '',
         'address'    => $_POST['address'] ?? '',
         'scout_name' => $_POST['scout_name'] ?? '',
-        'payment'    => $_POST['payment'] ?? ''
+        'payment'    => $_POST['payment'] ?? '',
+        'comments'   => isset($_POST['comments']) ? trim($_POST['comments']) : ''
     ];
 }
 
@@ -81,6 +82,10 @@ $grand_total = 0;
     <div class="review-section">
         <div class="review-label">Credit to Scout</div>
         <div class="review-value"><?php echo htmlspecialchars($_POST['scout_name']); ?></div>
+    </div>
+    <div class="review-section">
+        <div class="review-label">Comments</div>
+        <div class="review-value"><?php echo htmlspecialchars($_POST['comments']); ?></div>
     </div>
     <div class="review-section">
         <div class="review-label">Payment Method</div>
