@@ -117,9 +117,9 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
             body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background: #f0f2f5; margin: 0; }
             .login-box { background: white; padding: 40px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); text-align: center; }
             input[type="password"] { padding: 12px; width: 220px; border: 1px solid #ddd; border-radius: 5px; margin-bottom: 15px; }
-            .btn { padding: 15px; border-radius: 8px; font-weight: bold; cursor: pointer; text-decoration: none; text-align: center; flex: 1; font-size: 0.8rem; }
-            .btn-back { background: #eee; color: #333; border: 1px solid #ccc; }
-            .btn-login { background: var(--accent-color); color: white; border: none; }
+            .btn { padding: 10px 15px; border-radius: 4px; font-weight: bold; cursor: pointer; text-decoration: none; text-align: center; flex: 1; font-size: 0.8rem; border: 1px solid #ccc; }
+            .btn-back { background: #eee; color: #333; }
+            .btn-login { background: var(--accent-color); color: white; }
 
             button[name="mark_paid"], button[name="mark_unpaid"] {
                 appearance: none;          /* Removes system-default styling */
