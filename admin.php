@@ -20,7 +20,6 @@ if (isset($_GET['logout'])) {
             $params["secure"], $params["httponly"]
         );
     }    
-    // Redirect to admin, but don't force the OLD sid
     header("Location: admin.php"); 
     exit;
 }
@@ -87,7 +86,7 @@ if (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true
     if (isset($_POST['mark_paid'])) {
         $stmt = $pdo->prepare("UPDATE orders SET status = 'Paid' WHERE id = ?");
         $stmt->execute([$_POST['order_id']]);
-        header("Location: admin.php?" . SID_STR);
+        header("Location: admin.php");
         exit;
     }
 
@@ -95,7 +94,7 @@ if (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true
     if (isset($_POST['mark_unpaid'])) {
         $stmt = $pdo->prepare("UPDATE orders SET status = 'Pending' WHERE id = ?");
         $stmt->execute([$_POST['order_id']]);
-        header("Location: admin.php?" . SID_STR);
+        header("Location: admin.php");
         exit;
     }    
 }
@@ -157,7 +156,7 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
             <form method="POST">
                 <input type="password" name="password" placeholder="Enter Password" required><br>
                 <button type="submit" class="btn btn-login">Login</button>
-                <a href="index.php?<?php echo SID_STR; ?>" class="btn btn-back">Back Home</a>
+                <a href="index.php" class="btn btn-back">Back Home</a>
             </form>
         </div>
     </body>
@@ -205,7 +204,7 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
                 <form method="POST" style="width: 100%; display: contents;">
                     <button type="submit" name="download_orders_csv" class="btn btn-green">Download Order Info (CSV)</button>
                     <button type="submit" name="download_products_csv" class="btn btn-orange">Download Product Orders (CSV)</button>
-                    <a href="reports.php?<?php echo SID_STR; ?>" class="btn btn-purple">View Scout Reports</a>
+                    <a href="reports.php" class="btn btn-purple">View Scout Reports</a>
                     <a href="?logout=1" class="btn btn-logout">Logout</a>
                 </form>
             </div>

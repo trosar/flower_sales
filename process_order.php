@@ -6,7 +6,7 @@ $details = $_SESSION['checkout_details'] ?? null;
 
 // Security Check: If the cart is empty or the session details are missing, kick back to cart
 if (empty($_SESSION['cart']) || !$details) {
-    header("Location: checkout.php?" . SID_STR);
+    header("Location: checkout.php");
     exit;
 }
 
@@ -189,7 +189,7 @@ unset($_SESSION['checkout_details']);
         <p>Your order number is <b>#<?php echo $newOrderId; ?></b></p>
         <div style="margin-top: 30px;" class="no-print">
             <p>Please print this page for your records. 
-                You can lookup your order details in <a href="view_order.php?<?php echo SID_STR; ?>&email=<?php echo htmlspecialchars($email); ?>" target="_blank">this page</a></p>
+                You can lookup your order details in <a href="view_order.php?email=<?php echo htmlspecialchars($email); ?>" target="_blank">this page</a></p>
         </div>        
         
         <div class="order-summary">
@@ -212,7 +212,7 @@ unset($_SESSION['checkout_details']);
             </p>
         </div>
         <div style="margin-top: 40px;">
-            <a href="index.php?<?php echo SID_STR; ?>" class="btn">Return Home</a>
+            <a href="index.php" class="btn">Return Home</a>
         </div>        
     </div>
 </body>

@@ -9,7 +9,7 @@ $selectedPayment = $saved['payment'] ?? '';
 if (isset($_GET['remove'])) {
     $id_to_remove = $_GET['remove'];
     unset($_SESSION['cart'][$id_to_remove]);
-    header("Location: checkout.php?" . SID_STR);
+    header("Location: checkout.php");
     exit;
 }
 
@@ -22,7 +22,7 @@ if (isset($_POST['update_qty'])) {
     } elseif ($new_qty <= 0) {
         unset($_SESSION['cart'][$id]);
     }
-    header("Location: checkout.php?" . SID_STR);
+    header("Location: checkout.php");
     exit;
 }
 
@@ -116,14 +116,14 @@ $grand_total = 0;
     <!-- <div class="header">
         <img src="media/Troop_60_Logo.png" alt="Logo">
         <a href="checkout.php" class="cart-badge">
-            <a href="index.php?<?php echo SID_STR; ?>" style="text-decoration: none; color: var(--primary-color);">Back to Shopping</a>
+            <a href="index.php" style="text-decoration: none; color: var(--primary-color);">Back to Shopping</a>
         </a>
     </div> -->
 
 
     <?php if (empty($_SESSION['cart'])): ?>
         <p>Your cart is empty.</p><br/>
-        <a href="index.php?<?php echo SID_STR; ?>" class="btn btn-back">Back Home</a>
+        <a href="index.php" class="btn btn-back">Back Home</a>
     <?php else: ?>
         <table>
             <thead>
@@ -163,7 +163,7 @@ $grand_total = 0;
 
         <div class="total-row">Grand Total: $<span id="grand-total-display"><?php echo number_format($grand_total, 2); ?></span></div>
 
-        <form action="confirmation.php?<?php echo SID_STR; ?>" method="POST">
+        <form action="confirmation.php" method="POST">
             <h2>Checkout Information</h2>
             <div class="form-group">
                 <label>How will you pay?</label>
@@ -194,7 +194,7 @@ $grand_total = 0;
                 <input type="text" name="comments" id="comments" value="<?php echo htmlspecialchars($saved['comments'] ?? ''); ?>" placeholder="">
             </div>            
             <div class="btn-group">
-                <a href="index.php?<?php echo SID_STR; ?>" class="btn btn-back">Back Home</a>
+                <a href="index.php" class="btn btn-back">Back Home</a>
                 <button type="submit" class="btn btn-confirm">Review Order</button>
             </div>
         </form>
@@ -202,7 +202,6 @@ $grand_total = 0;
 </div>
 
 <script>
-const sidParam = '<?php echo SID_STR; ?>';
 let itemToDelete = null;
 
 document.addEventListener('click', function(e) {
@@ -248,7 +247,7 @@ function updateCart(pId, qty, action) {
     formData.append('quantity', qty);
     formData.append('action', action);
 
-    fetch(`update_cart_ajax.php?${sidParam}`, {
+    fetch(`update_cart_ajax.php`, {
         method: 'POST',
         body: formData
     })

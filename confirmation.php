@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 // If they didn't come from the checkout form, send them back
 if (!isset($_POST['name'])) {
-    header("Location: checkout.php?" . SID_STR);
+    header("Location: checkout.php");
     exit;
 }
 
@@ -118,8 +118,8 @@ $grand_total = 0;
     <h2 style="text-align: right; color: var(--primary-color);">Grand Total: $<?php echo number_format($grand_total, 2); ?></h2>
 
     <div class="btn-group">
-        <a href="checkout.php?<?php echo SID_STR; ?>" class="btn btn-back">Back to Cart</a>
-        <form action="process_order.php?<?php echo SID_STR; ?>" method="POST" style="flex: 1;">
+        <a href="checkout.php" class="btn btn-back">Back to Cart</a>
+        <form action="process_order.php" method="POST" style="flex: 1;">
             <button type="submit" class="btn btn-confirm" style="width:100%;">Place Order</button>
         </form>
     </div>

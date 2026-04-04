@@ -8,7 +8,7 @@ if (isset($_POST['add_to_cart'])) {
     if ($qty >= 1 && $qty <= 9) {
         $_SESSION['cart'][$p_id] = ($_SESSION['cart'][$p_id] ?? 0) + $qty;
     }
-    header("Location: index.php?" . SID_STR);
+    header("Location: index.php");
     exit;
 }
 
@@ -176,7 +176,7 @@ $products = $pdo->query("SELECT * FROM products order by price desc")->fetchAll(
     </div>
     <div class="header">
         <!-- <img src="media/Troop_60_Logo.png" alt="Logo"> -->
-        <a href="checkout.php?<?php echo SID_STR; ?>" class="cart-badge" id="cart-anchor">
+        <a href="checkout.php" class="cart-badge" id="cart-anchor">
             View Cart (<span id="cart-qty"><?php echo $cart_count; ?></span>)
         </a>
     </div>
@@ -201,7 +201,7 @@ $products = $pdo->query("SELECT * FROM products order by price desc")->fetchAll(
         <div style="text-align: right; margin-bottom: 10px;">
             <small>
             <span id="thanks">Thanks for your support!</span><br/>    
-            <a href="view_order.php?<?php echo SID_STR; ?>">
+            <a href="view_order.php">
                 Look Up Your Orders
             </a>
             |
@@ -229,7 +229,7 @@ document.querySelectorAll('.ajax-form').forEach(form => {
         const formData = new FormData(this);
 
         // 1. Send the data to the server
-        fetch('add_ajax.php?<?php echo SID_STR; ?>', {
+        fetch('add_ajax.php', {
             method: 'POST',
             body: formData
         })

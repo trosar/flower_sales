@@ -154,7 +154,7 @@ $troopTotal = $pdo->query("SELECT SUM(total_amount) FROM orders where status != 
                 <form method="POST" style="width: 100%; display: contents;">
                     <button type="submit" name="download_scout_report_csv" class="btn btn-purple">Download Report (CSV)</button>
                     <button type="button" onclick="downloadPrintableHTML()" class="btn btn-green">Download Report</button>                    
-                    <a href="admin.php?<?php echo SID_STR; ?>" class="btn btn-back">Back to Admin</a>
+                    <a href="admin.php" class="btn btn-back">Back to Admin</a>
                 </form>
             </div>
         </div>

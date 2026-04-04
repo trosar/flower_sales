@@ -41,8 +41,6 @@ if ($email_query) {
     
     <div class="search-box">
         <form method="GET" action="view_order.php">
-            <input type="hidden" name="sid" value="<?php echo session_id(); ?>">
-            
             <input type="email" name="email" 
                 placeholder="Enter the email used for order" 
                 required value="<?php echo htmlspecialchars($email_query); ?>">
@@ -91,7 +89,7 @@ if ($email_query) {
     <?php endif; ?>
 
     <div style="text-align: center; margin-top: 20px;">
-        <a href="index.php?<?php echo SID_STR; ?>" style="color: #666; font-size: 0.9rem;">Back to Homepage</a>
+        <a href="index.php" style="color: #666; font-size: 0.9rem;">Back to Homepage</a>
     </div>
 </div>
 
