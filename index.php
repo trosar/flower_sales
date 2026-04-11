@@ -41,7 +41,7 @@ $products = $pdo->query("SELECT * FROM products order by price desc")->fetchAll(
             max-width: 1000px; /* Changed from 1100px */
             margin: 0 auto;
             background: white;
-            padding: 40px;
+            padding: 10px 40px;
             border-radius: 12px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.08);
         }
@@ -52,16 +52,22 @@ $products = $pdo->query("SELECT * FROM products order by price desc")->fetchAll(
             justify-content: space-between;
             margin-bottom: 30px;
             border-bottom: 2px solid #eee;
-            padding-bottom: 20px;
+        }
+        .fundraiser-info {
+            text-align: center;
         }
 
-        .header img { height: 50px; }
-        .stadium_logo { height: 50px; }
+        .troop_logo { height: 50px; }
+        .stadium_logo { height: 35px; vertical-align:middle;}
+        .header h2 { color: var(--primary-color); margin-bottom: 10px; }
+        .mobile-break {
+            display: none;
+        }
 
         .cart-badge {
             transition: transform 0.2s ease;
             display: inline-block; /* Required for transform to work */
-            background: var(--primary-color);
+            background: var(--accent-color);
             color: white;
             padding: 12px 20px;
             border-radius: 50px;
@@ -69,15 +75,7 @@ $products = $pdo->query("SELECT * FROM products order by price desc")->fetchAll(
             font-weight: bold;
             display: flex;
             align-items: center;
-            gap: 10px;
         }
-
-        .fundraiser-info {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .fundraiser-info h2 { color: var(--primary-color); margin-bottom: 10px; }
 
         /* Product Grid */
         .grid {
@@ -92,6 +90,10 @@ $products = $pdo->query("SELECT * FROM products order by price desc")->fetchAll(
             padding: 15px;
             text-align: center;
             transition: transform 0.2s;
+        }
+        h3 {
+            font-size: 1rem;
+            color: #333;
         }
 
         .product-card:hover { transform: translateY(-5px); box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
@@ -120,7 +122,17 @@ $products = $pdo->query("SELECT * FROM products order by price desc")->fetchAll(
 
         .footer-nav {
             margin-top: 50px;
+            padding-top: 20px;
+            padding-bottom: 20px;
+            border-top: 1px solid #eee;    /* Top border line */
+            border-bottom: 1px solid #eee; /* Bottom border line */
             text-align: center;
+        }
+
+        .footer-nav h3 {
+            margin-top: 20px;
+            font-size: 1.1rem;
+            color: #444;
         }
 
         .btn-checkout-large {
@@ -139,13 +151,19 @@ $products = $pdo->query("SELECT * FROM products order by price desc")->fetchAll(
              body { padding: 10px; }
             .main-container { padding: 20px; }
             .grid { grid-template-columns: 1fr; }
-            .header { flex-direction: column; gap: 15px; text-align: center; }
+            .header { 
+                flex-direction: column; gap: 15px; text-align: center; 
+                padding-bottom: 15px;
+            }
             .product-card img {
                 height: 150px;
                 object-fit: cover;
                 border-radius: 6px;
                 margin-bottom: 15px;
             }
+            .mobile-break {
+                display: inline;
+            }            
         }
 
         input[type="text"], 
@@ -162,20 +180,23 @@ $products = $pdo->query("SELECT * FROM products order by price desc")->fetchAll(
 <body>
 
 <div class="main-container">
+    <div class="header">
+        <img class="troop_logo" src="media/Troop_60_Logo.png" alt="Troop 60 Logo">
+        <h2>Plant Sales <br class="mobile-break">- Spring 2026</h2>
+    </div>
+
     <div class="fundraiser-info">
-        <h2>Troop 60 Fundraiser - Plant Sales - Spring 2026</h2>
         <p>
-            We are selling plants to raise money to enable us to participate in adventures during the year, including summer camp. <br/>
-            Thanks for your support!
+            We are selling plants to raise money to enable us to participate in adventures during the year, including summer camp.
+            <br/>Thanks for your support!
         </p>
         <h3>Orders are due by April 16 2026. Delivery will be made on May 1 2026.</h3>
-        <h3 style="vertical-align:top;">Products Sponsored By: 
-        <a href="https://www.stadiumflowers.com/" target="_blank"><img class="stadium_logo" src="media/Stadium_Flowers_Logo.png" alt="Stadium Flowers Logo"></a>
-        </h3>
 
     </div>
     <div class="header">
-        <!-- <img src="media/Troop_60_Logo.png" alt="Logo"> -->
+        <h4>Products Sponsored By: 
+        <a href="https://www.stadiumflowers.com/" target="_blank"><img class="stadium_logo" src="media/Stadium_Flowers_Logo.png" alt="Stadium Flowers Logo"></a>
+        </h4>
         <a href="checkout.php" class="cart-badge" id="cart-anchor">
             View Cart (<span id="cart-qty"><?php echo $cart_count; ?></span>)
         </a>
@@ -197,22 +218,20 @@ $products = $pdo->query("SELECT * FROM products order by price desc")->fetchAll(
         <?php endforeach; ?>
     </div>
     <div class="footer-nav">
-        <hr/>
-        <div style="text-align: right; margin-bottom: 10px;">
+        <div style="text-align: right; margin-bottom: 15px;">
             <small>
-            <span id="thanks">Thanks for your support!</span><br/>    
-            <a href="view_order.php">
-                Look Up Your Orders
-            </a>
-            |
-            <a href="admin.php">Admin Login</a></small>
+                <span id="thanks">Thanks for your support!</span><br/>    
+                <a href="view_order.php">Look Up Your Orders</a>
+                |
+                <a href="admin.php">Admin Login</a>
+            </small>
         </div>    
-        <hr/>
-        </br/>
-        <h3>Products are Sponsored By: 
-            <a href="https://www.stadiumflowers.com/" target="_blank"><img class="stadium_logo" src="media/Stadium_Flowers_Logo.png" alt="Stadium Flowers Logo"></a>
-        </h3>
 
+        <h3>Products are Sponsored By: 
+            <a href="https://www.stadiumflowers.com/" target="_blank">
+                <img class="stadium_logo" src="media/Stadium_Flowers_Logo.png" alt="Stadium Flowers Logo">
+            </a>
+        </h3>
     </div>
     <div id="credit-popup" style="display:none; position:fixed; bottom:20px; right:20px; background:#2e7d32; color:white; padding:10px 20px; border-radius:30px; box-shadow:0 4px 10px rgba(0,0,0,0.2); font-weight:bold; z-index:9999;">
         Built with ❤️ by Alan Rosario
