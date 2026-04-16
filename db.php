@@ -73,4 +73,20 @@ try {
      error_log($e->getMessage());
      die("Database connection failed.");
 }
+
+/**
+ * Formats a UTC database date string into local time (Pacific)
+ * Default format: "Apr 15, 2026 10:30 PM"
+ */
+function formatLocalDate($dateStr, $format = 'M j, Y g:i A') {
+    if (!$dateStr) return '';
+    
+    try {
+        $date = new DateTime($dateStr, new DateTimeZone('UTC'));
+        $date->setTimezone(new DateTimeZone('America/Los_Angeles'));
+        return $date->format($format);
+    } catch (Exception $e) {
+        return $dateStr; // Fallback to raw string if parsing fails
+    }
+}
 ?>

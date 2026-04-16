@@ -48,13 +48,9 @@ if (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true
         $stmt = $pdo->query("SELECT * FROM orders where status != 'Cancelled' ORDER BY order_date DESC");
         $grandTotal = 0;
         while ($row = $stmt->fetch()) {
-            $date = new DateTime($row['order_date'], new DateTimeZone('UTC'));
-            $date->setTimezone(new DateTimeZone('America/Los_Angeles'));
-            $formattedDate = $date->format('M j, Y g:i A'); 
-
             fputcsv($output, [
                 $row['id'], 
-                $formattedDate,
+                formatLocalDate($row['order_date']), 
                 $row['customer_name'], 
                 $row['address'], 
                 $row['email'], 
@@ -228,11 +224,7 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
                     <strong>Order #<?php echo $order['id']; ?></strong><br>
                     <small style="color:#888;">
                         <?php 
-                            // Create a DateTime object from the database string (which is UTC)
-                            $date = new DateTime($order['order_date'], new DateTimeZone('UTC'));
-                            // Convert the object to your local timezone (America/Los_Angeles)
-                            $date->setTimezone(new DateTimeZone('America/Los_Angeles'));
-                            echo $date->format('M j, Y g:i A'); 
+                            echo formatLocalDate($order['order_date']);
                         ?>
                     </small>
                 </div>

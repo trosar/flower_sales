@@ -23,15 +23,10 @@ if (isset($_POST['download_scout_report_csv'])) {
     
     $stmt = $pdo->query($sql);
     while ($row = $stmt->fetch()) {
-        $orderDate = new DateTime($row['order_date'], new DateTimeZone('UTC'));
-        // Convert the object to your local timezone (America/Los_Angeles)
-        $orderDate->setTimezone(new DateTimeZone('America/Los_Angeles'));
-        $orderDate = $orderDate->format('M j, Y g:i A');
-
         fputcsv($output, [
             $row['scout_name'], $row['customer_name'], $row['address'], 
             $row['product_name'], $row['quantity'], $row['subtotal'], 
-            $row['status'], $row['payment_mode'], $orderDate, $row['comments']
+            $row['status'], $row['payment_mode'], formatLocalDate($row['order_date']), $row['comments']
         ]);
     }
     fclose($output);
@@ -228,12 +223,6 @@ $orderCount = $stats['order_count'] ?? 0;
                     // --- 2. NEW ORDER SUB-GROUPING ---
                     if ($currentOrder !== $row['order_id']):
                         $currentOrder = $row['order_id'];
-
-                        // Create a DateTime object from the database string (which is UTC)
-                        $orderDate = new DateTime($row['order_date'], new DateTimeZone('UTC'));
-                        // Convert the object to your local timezone (America/Los_Angeles)
-                        $orderDate->setTimezone(new DateTimeZone('America/Los_Angeles'));
-                        $orderDate = $orderDate->format('M j, Y g:i A');
                 ?>
                     <tr style="background: #f9f9f9; border-top: 1px solid #ddd;">
                         <td colspan="5" style="padding: 10px 15px;">
@@ -248,7 +237,7 @@ $orderCount = $stats['order_count'] ?? 0;
                                 </span>
                             </div>
                             <div style="font-size: 0.85rem; color: #555; margin-top: 4px;">
-                                📍 <?php echo htmlspecialchars($row['address']); ?> | 📅 <?php echo $orderDate; ?>
+                                📍 <?php echo htmlspecialchars($row['address']); ?> | 📅 <?php echo formatLocalDate($row['order_date']); ?>
                             </div>
                             <?php if (!empty($row['comments'])): ?>
                                 <div style="font-size: 0.85rem; padding: 5px;">
