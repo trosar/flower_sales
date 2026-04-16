@@ -46,10 +46,11 @@ if (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true
         $output = fopen('php://output', 'w');
         fputcsv($output, ['Order ID', 'Date', 'Customer', 'Address', 'Email', 'Scout', 'Payment', 'Total', 'Status', 'Comments']);
         $stmt = $pdo->query("SELECT * FROM orders where status != 'Cancelled' ORDER BY order_date DESC");
+        $grandTotal = 0;
         while ($row = $stmt->fetch()) {
             $date = new DateTime($row['order_date'], new DateTimeZone('UTC'));
             $date->setTimezone(new DateTimeZone('America/Los_Angeles'));
-            $formattedDate = $date->format('Y-m-d H:i:s');
+            $formattedDate = $date->format('M j, Y g:i A'); 
 
             fputcsv($output, [
                 $row['id'], 
@@ -63,7 +64,9 @@ if (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true
                 $row['status'],
                 $row['comments']
             ]);
+            $grandTotal += $row['total_amount'];
         }
+        fputcsv($output, ['==', '==', '==', '==', '==', '==', '==', number_format($grandTotal, 2), '==', 'Total Sales']);
         fclose($output);
         exit;
     }
@@ -76,9 +79,12 @@ if (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true
         fputcsv($output, ['Status', 'Product Name', 'Total Quantity Ordered']);
         $sql = "SELECT oi.product_name, o.status, SUM(oi.quantity) as total_qty FROM order_items oi LEFT JOIN orders o ON oi.order_id = o.id GROUP BY status, product_name ORDER BY status, product_name";
         $stmt = $pdo->query($sql);
+        $grandTotal = 0;
         while ($row = $stmt->fetch()) {
             fputcsv($output, [$row['status'], $row['product_name'], $row['total_qty']]);
+            $grandTotal += $row['total_qty'];
         }
+        fputcsv($output, ['== TOTAL ==', '== All Products ==', $grandTotal]);
         fclose($output);
         exit;
     }

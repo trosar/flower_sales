@@ -23,10 +23,15 @@ if (isset($_POST['download_scout_report_csv'])) {
     
     $stmt = $pdo->query($sql);
     while ($row = $stmt->fetch()) {
+        $orderDate = new DateTime($row['order_date'], new DateTimeZone('UTC'));
+        // Convert the object to your local timezone (America/Los_Angeles)
+        $orderDate->setTimezone(new DateTimeZone('America/Los_Angeles'));
+        $orderDate = $orderDate->format('M j, Y g:i A');
+
         fputcsv($output, [
             $row['scout_name'], $row['customer_name'], $row['address'], 
             $row['product_name'], $row['quantity'], $row['subtotal'], 
-            $row['status'], $row['payment_mode'], $row['order_date'], $row['comments']
+            $row['status'], $row['payment_mode'], $orderDate, $row['comments']
         ]);
     }
     fclose($output);
@@ -43,7 +48,9 @@ $leaderboardSql = "SELECT scout_name, SUM(total_amount) as total_sales, COUNT(id
 $leaderboard = $pdo->query($leaderboardSql)->fetchAll();
 
 // Total Troop Sales
-$troopTotal = $pdo->query("SELECT SUM(total_amount) FROM orders where status != 'Cancelled'")->fetchColumn();
+$stats = $pdo->query("SELECT SUM(total_amount) as total_sum, count(1) order_count FROM orders where status != 'Cancelled'")->fetch();
+$troopTotal = $stats['total_sum'] ?? 0;
+$orderCount = $stats['order_count'] ?? 0;
 ?>
 
 <!DOCTYPE html>
@@ -184,7 +191,7 @@ $troopTotal = $pdo->query("SELECT SUM(total_amount) FROM orders where status != 
             <div style="font-size: 2.5rem; font-weight: bold; color: #2e7d32; margin: 10px 0;">
                 $<?php echo number_format($troopTotal, 2); ?>
             </div>
-            <p style="color: #888; margin: 0;">Way to go, Troop 60!</p>
+            <p style="color: #888; margin: 0;">(<?php echo $orderCount; ?> orders)</p>
         </div>
     </div>    
 
@@ -221,7 +228,12 @@ $troopTotal = $pdo->query("SELECT SUM(total_amount) FROM orders where status != 
                     // --- 2. NEW ORDER SUB-GROUPING ---
                     if ($currentOrder !== $row['order_id']):
                         $currentOrder = $row['order_id'];
-                        $orderDate = date('M j, g:i A', strtotime($row['order_date']));
+
+                        // Create a DateTime object from the database string (which is UTC)
+                        $orderDate = new DateTime($row['order_date'], new DateTimeZone('UTC'));
+                        // Convert the object to your local timezone (America/Los_Angeles)
+                        $orderDate->setTimezone(new DateTimeZone('America/Los_Angeles'));
+                        $orderDate = $orderDate->format('M j, Y g:i A');
                 ?>
                     <tr style="background: #f9f9f9; border-top: 1px solid #ddd;">
                         <td colspan="5" style="padding: 10px 15px;">
@@ -317,9 +329,8 @@ function downloadPrintableHTML() {
     const a = document.createElement('a');
     
     // Name the file with today's date
-    const date = new Date().toISOString().split('T')[0];
     a.href = url;
-    a.download = 'Scout_Report_' + date + '.html';
+    a.download = 'Scout_Report_<?php echo date('Y-m-d'); ?>.html';
     
     // Trigger the download
     document.body.appendChild(a);
