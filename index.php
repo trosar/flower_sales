@@ -174,6 +174,12 @@ $products = $pdo->query("SELECT * FROM products order by price desc")->fetchAll(
         </h3>
 
     </div>
+
+<?php
+echo "<!-- STORE_IS_OPEN: " . ($store_is_open ? 'true' : 'false') . " -->";
+if ($store_is_open) {
+?>
+    
     <div class="header">
         <!-- <img src="media/Troop_60_Logo.png" alt="Logo"> -->
         <a href="checkout.php?<?php echo SID_STR; ?>" class="cart-badge" id="cart-anchor">
@@ -196,6 +202,10 @@ $products = $pdo->query("SELECT * FROM products order by price desc")->fetchAll(
         </div>
         <?php endforeach; ?>
     </div>
+<?php
+}
+?>
+
     <div class="footer-nav">
         <hr/>
         <div style="text-align: right; margin-bottom: 10px;">

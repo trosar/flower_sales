@@ -53,6 +53,8 @@ $user = getenv('DB_USER');
 $pass = getenv('DB_PASS');
 $charset = 'utf8mb4';
 
+$store_is_open = strtolower(getenv('STORE_IS_OPEN') === 'true');
+
 // Basic validation: stop if variables are missing
 if (!$host || !$user || !$pass) {
     die("Environment variables are not configured.");
