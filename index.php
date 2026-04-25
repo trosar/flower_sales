@@ -193,6 +193,12 @@ $products = $pdo->query("SELECT * FROM products order by price desc")->fetchAll(
         <h3>Orders are due by April 16 2026. Delivery will be made on May 1 2026.</h3>
 
     </div>
+
+<?php
+echo "<!-- STORE_IS_OPEN: " . ($store_is_open ? 'true' : 'false') . " -->";
+if ($store_is_open) {
+?>
+    
     <div class="header">
         <h4>Products Sponsored By: 
         <a href="https://www.stadiumflowers.com/" target="_blank"><img class="stadium_logo" src="media/Stadium_Flowers_Logo.png" alt="Stadium Flowers Logo"></a>
@@ -217,6 +223,10 @@ $products = $pdo->query("SELECT * FROM products order by price desc")->fetchAll(
         </div>
         <?php endforeach; ?>
     </div>
+<?php
+}
+?>
+
     <div class="footer-nav">
         <div style="text-align: right; margin-bottom: 15px;">
             <small>

@@ -45,14 +45,11 @@ if (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true
         $output = fopen('php://output', 'w');
         fputcsv($output, ['Order ID', 'Date', 'Customer', 'Address', 'Email', 'Scout', 'Payment', 'Total', 'Status', 'Comments']);
         $stmt = $pdo->query("SELECT * FROM orders where status != 'Cancelled' ORDER BY order_date DESC");
+        $grandTotal = 0;
         while ($row = $stmt->fetch()) {
-            $date = new DateTime($row['order_date'], new DateTimeZone('UTC'));
-            $date->setTimezone(new DateTimeZone('America/Los_Angeles'));
-            $formattedDate = $date->format('Y-m-d H:i:s');
-
             fputcsv($output, [
                 $row['id'], 
-                $formattedDate,
+                formatLocalDate($row['order_date']), 
                 $row['customer_name'], 
                 $row['address'], 
                 $row['email'], 
@@ -62,7 +59,9 @@ if (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true
                 $row['status'],
                 $row['comments']
             ]);
+            $grandTotal += $row['total_amount'];
         }
+        fputcsv($output, ['==', '==', '==', '==', '==', '==', '==', number_format($grandTotal, 2), '==', 'Total Sales']);
         fclose($output);
         exit;
     }
@@ -75,9 +74,12 @@ if (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true
         fputcsv($output, ['Status', 'Product Name', 'Total Quantity Ordered']);
         $sql = "SELECT oi.product_name, o.status, SUM(oi.quantity) as total_qty FROM order_items oi LEFT JOIN orders o ON oi.order_id = o.id GROUP BY status, product_name ORDER BY status, product_name";
         $stmt = $pdo->query($sql);
+        $grandTotal = 0;
         while ($row = $stmt->fetch()) {
             fputcsv($output, [$row['status'], $row['product_name'], $row['total_qty']]);
+            $grandTotal += $row['total_qty'];
         }
+        fputcsv($output, ['== TOTAL ==', '== All Products ==', $grandTotal]);
         fclose($output);
         exit;
     }
@@ -221,11 +223,7 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
                     <strong>Order #<?php echo $order['id']; ?></strong><br>
                     <small style="color:#888;">
                         <?php 
-                            // Create a DateTime object from the database string (which is UTC)
-                            $date = new DateTime($order['order_date'], new DateTimeZone('UTC'));
-                            // Convert the object to your local timezone (America/Los_Angeles)
-                            $date->setTimezone(new DateTimeZone('America/Los_Angeles'));
-                            echo $date->format('M j, Y g:i A'); 
+                            echo formatLocalDate($order['order_date']);
                         ?>
                     </small>
                 </div>

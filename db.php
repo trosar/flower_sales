@@ -31,6 +31,8 @@ $user = getenv('DB_USER');
 $pass = getenv('DB_PASS');
 $charset = 'utf8mb4';
 
+$store_is_open = strtolower(getenv('STORE_IS_OPEN') === 'true');
+
 // Basic validation: stop if variables are missing
 if (!$host || !$user || !$pass) {
     die("Environment variables are not configured.");
@@ -50,5 +52,21 @@ try {
      // Error is logged internally, but hidden from the public for security
      error_log($e->getMessage());
      die("Database connection failed.");
+}
+
+/**
+ * Formats a UTC database date string into local time (Pacific)
+ * Default format: "Apr 15, 2026 10:30 PM"
+ */
+function formatLocalDate($dateStr, $format = 'M j, Y g:i A') {
+    if (!$dateStr) return '';
+    
+    try {
+        $date = new DateTime($dateStr, new DateTimeZone('UTC'));
+        $date->setTimezone(new DateTimeZone('America/Los_Angeles'));
+        return $date->format($format);
+    } catch (Exception $e) {
+        return $dateStr; // Fallback to raw string if parsing fails
+    }
 }
 ?>

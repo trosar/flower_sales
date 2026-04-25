@@ -58,7 +58,7 @@ if ($email_query) {
                     <div class="order-header">
                         <div>
                             <strong>Order #<?php echo $order['id']; ?></strong><br>
-                            <small><?php echo date('M j, Y', strtotime($order['order_date'])); ?></small>
+                            <small><?php echo formatLocalDate($order['order_date'], 'M j, Y'); ?></small>
                         </div>
                         <span class="status-badge <?php echo $order['status']; ?>">
                             <?php echo strtoupper($order['status']); ?>
