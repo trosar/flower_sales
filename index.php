@@ -47,23 +47,31 @@ $products = $pdo->query("SELECT * FROM products order by price desc")->fetchAll(
         }
 
         .header {
+            max-width: 1000px; /* Changed from 1100px */
+            margin: 0 auto;
+            background: white;
+            padding: 10px 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 30px;
+            margin-bottom: 5px;
             border-bottom: 2px solid #eee;
+        }
+        .troop_logo { height: 40px; }
+        .header h2 { color: var(--primary-color); margin-bottom: 10px; }
+        .cart-header {
+            box-shadow: none;
+            border-radius: 0px;
+            padding: 10px 10px;
         }
         .fundraiser-info {
             text-align: center;
         }
 
-        .troop_logo { height: 50px; }
         .stadium_logo { height: 35px; vertical-align:middle;}
-        .header h2 { color: var(--primary-color); margin-bottom: 10px; }
-        .mobile-break {
-            display: none;
-        }
-
         .cart-badge {
             transition: transform 0.2s ease;
             display: inline-block; /* Required for transform to work */
@@ -73,7 +81,7 @@ $products = $pdo->query("SELECT * FROM products order by price desc")->fetchAll(
             border-radius: 50px;
             text-decoration: none;
             font-weight: bold;
-            display: flex;
+            display: inline;
             align-items: center;
         }
 
@@ -152,18 +160,19 @@ $products = $pdo->query("SELECT * FROM products order by price desc")->fetchAll(
             .main-container { padding: 20px; }
             .grid { grid-template-columns: 1fr; }
             .header { 
-                flex-direction: column; gap: 15px; text-align: center; 
-                padding-bottom: 15px;
+                padding: 0px 15px;
             }
+            .cart-header {
+                padding: 0px;
+
+            }
+            .header h2 { font-size: 1.2rem;}
             .product-card img {
                 height: 150px;
                 object-fit: cover;
                 border-radius: 6px;
                 margin-bottom: 15px;
             }
-            .mobile-break {
-                display: inline;
-            }            
         }
 
         input[type="text"], 
@@ -178,12 +187,12 @@ $products = $pdo->query("SELECT * FROM products order by price desc")->fetchAll(
     </style>
 </head>
 <body>
+<div class="header">
+    <a href="https://www.troop60.co/"><img class="troop_logo" src="media/Troop_60_Logo.png" alt="Troop 60 Logo"></a>
+    <h2>Plant Sales</h2>
+</div>
 
 <div class="main-container">
-    <div class="header">
-        <img class="troop_logo" src="media/Troop_60_Logo.png" alt="Troop 60 Logo">
-        <h2>Plant Sales <br class="mobile-break">- Spring 2026</h2>
-    </div>
 
     <div class="fundraiser-info">
         <p>
@@ -199,8 +208,8 @@ echo "<!-- STORE_IS_OPEN: " . ($store_is_open ? 'true' : 'false') . " -->";
 if ($store_is_open) {
 ?>
     
-    <div class="header">
-        <h4>Products Sponsored By: 
+    <div class="header cart-header">
+        <h4>Sponsor:
         <a href="https://www.stadiumflowers.com/" target="_blank"><img class="stadium_logo" src="media/Stadium_Flowers_Logo.png" alt="Stadium Flowers Logo"></a>
         </h4>
         <a href="checkout.php" class="cart-badge" id="cart-anchor">

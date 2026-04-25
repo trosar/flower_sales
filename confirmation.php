@@ -41,17 +41,24 @@ $grand_total = 0;
         .btn { padding: 15px; border-radius: 8px; font-weight: bold; cursor: pointer; text-decoration: none; text-align: center; flex: 1; }
         .btn-back { background: #eee; color: #333; border: 1px solid #ccc; }
         .btn-confirm { background: var(--accent-color); color: white; border: none; font-size: 1.1rem; }
-        h2 { color: var(--primary-color); border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        .headings { color: var(--primary-color); border-bottom: 2px solid #eee; padding-bottom: 10px; }
         .header {
+            max-width: 1000px; /* Changed from 1100px */
+            margin: 0 auto;
+            background: white;
+            padding: 10px 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 30px;
+            margin-bottom: 5px;
             border-bottom: 2px solid #eee;
-            padding-bottom: 20px;
         }
-
-        .header img { height: 70px; }        
+        .troop_logo { height: 40px; }
+        .header h2 { color: var(--primary-color); margin-bottom: 10px; }
+        .headings { color: var(--accent-color); border-bottom: 2px solid #eee; padding-bottom: 10px; }      
         @media (max-width: 600px) {
             body { padding: 10px; }
             .main-container { padding: 20px; }
@@ -60,9 +67,12 @@ $grand_total = 0;
     </style>
 </head>
 <body>
-
+<div class="header">
+    <a href="https://www.troop60.co/"><img class="troop_logo" src="media/Troop_60_Logo.png" alt="Troop 60 Logo"></a>
+    <h2>Plant Sales</h2>
+</div>
 <div class="main-container">
-    <h2>Review Your Order</h2>
+    <h2 class="headings">Review Your Order</h2>
         <!-- <div class="header">
     Please double-check the following before placing your order.
     </div> -->

@@ -51,16 +51,22 @@ $grand_total = 0;
             box-shadow: 0 4px 20px rgba(0,0,0,0.08);
         }
         .header {
+            max-width: 1000px; /* Changed from 1100px */
+            margin: 0 auto;
+            background: white;
+            padding: 10px 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 30px;
+            margin-bottom: 5px;
             border-bottom: 2px solid #eee;
-            padding-bottom: 20px;
         }
-
-        .header img { height: 70px; }        
-        h2 { color: var(--primary-color); border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        .troop_logo { height: 40px; }
+        .header h2 { color: var(--primary-color); margin-bottom: 10px; }
+        .headings { color: var(--accent-color); border-bottom: 2px solid #eee; padding-bottom: 10px; }
         
         /* Table Styling */
         table { width: 100%; border-collapse: collapse; margin-bottom: 30px; }
@@ -107,11 +113,13 @@ $grand_total = 0;
     </style>
 </head>
 <body>
+<div class="header">
+    <a href="https://www.troop60.co/"><img class="troop_logo" src="media/Troop_60_Logo.png" alt="Troop 60 Logo"></a>
+    <h2>Plant Sales</h2>
+</div>
 
-<div class="main-container">
-
-    
-    <h2>Your Cart</h2>
+<div class="main-container">    
+    <h2 class="headings">Your Cart</h2>
 
     <!-- <div class="header">
         <img src="media/Troop_60_Logo.png" alt="Logo">
@@ -164,7 +172,7 @@ $grand_total = 0;
         <div class="total-row">Grand Total: $<span id="grand-total-display"><?php echo number_format($grand_total, 2); ?></span></div>
 
         <form action="confirmation.php" method="POST">
-            <h2>Checkout Information</h2>
+            <h2 class="headings">Checkout Information</h2>
             <div class="form-group">
                 <label>How will you pay?</label>
                 <select name="payment" required>
