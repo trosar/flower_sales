@@ -21,47 +21,8 @@ $products = $pdo->query("SELECT * FROM products order by price desc")->fetchAll(
 <head>
     <title>Scout Fundraiser</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="styles.css">
     <style>
-        :root {
-            --primary-color: #2e7d32;
-            --accent-color: #f57c00;
-            --bg-color: #f0f2f5;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            margin: 0;
-            padding: 20px;
-            color: #333;
-        }
-
-        /* The Main Bordered Container */
-        .main-container {
-            max-width: 1000px; /* Changed from 1100px */
-            margin: 0 auto;
-            background: white;
-            padding: 10px 40px;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-        }
-
-        .header {
-            max-width: 1000px; /* Changed from 1100px */
-            margin: 0 auto;
-            background: white;
-            padding: 10px 40px;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 5px;
-            border-bottom: 2px solid #eee;
-        }
-        .troop_logo { height: 40px; }
-        .header h2 { color: var(--primary-color); margin-bottom: 10px; }
         .cart-header {
             box-shadow: none;
             border-radius: 0px;
@@ -143,30 +104,13 @@ $products = $pdo->query("SELECT * FROM products order by price desc")->fetchAll(
             color: #444;
         }
 
-        .btn-checkout-large {
-            background: var(--accent-color);
-            color: white;
-            padding: 20px 40px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-size: 1.3rem;
-            font-weight: bold;
-            display: inline-block;
-        }
-
         /* Mobile Layout: 1 Column */
         @media (max-width: 800px) {
-             body { padding: 10px; }
-            .main-container { padding: 20px; }
             .grid { grid-template-columns: 1fr; }
-            .header { 
-                padding: 0px 15px;
-            }
             .cart-header {
                 padding: 0px;
 
             }
-            .header h2 { font-size: 1.2rem;}
             .product-card img {
                 height: 150px;
                 object-fit: cover;
@@ -187,10 +131,7 @@ $products = $pdo->query("SELECT * FROM products order by price desc")->fetchAll(
     </style>
 </head>
 <body>
-<div class="header">
-    <a href="https://www.troop60.co/"><img class="troop_logo" src="media/Troop_60_Logo.png" alt="Troop 60 Logo"></a>
-    <h2>Plant Sales</h2>
-</div>
+<?php $page_title = 'Plant Sales'; include 'header-html.php'; ?>
 
 <div class="main-container">
 

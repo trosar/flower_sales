@@ -34,40 +34,8 @@ $grand_total = 0;
 <head>
     <title>Checkout</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="styles.css">
     <style>
-        :root {
-            --primary-color: #2e7d32;
-            --accent-color: #f57c00;
-            --bg-color: #f9f9f9;
-        }
-        body { font-family: sans-serif; background-color: var(--bg-color); margin: 0; padding: 20px; color: #333; }
-        
-        .main-container {
-            max-width: 1000px; /* Changed from 800px */
-            margin: 0 auto;
-            background: white;
-            padding: 40px; /* Match the 40px from index.php */
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-        }
-        .header {
-            max-width: 1000px; /* Changed from 1100px */
-            margin: 0 auto;
-            background: white;
-            padding: 10px 40px;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 5px;
-            border-bottom: 2px solid #eee;
-        }
-        .troop_logo { height: 40px; }
-        .header h2 { color: var(--primary-color); margin-bottom: 10px; }
-        .headings { color: var(--accent-color); border-bottom: 2px solid #eee; padding-bottom: 10px; }
-        
         /* Table Styling */
         table { width: 100%; border-collapse: collapse; margin-bottom: 30px; }
         th { text-align: left; background: #f2f2f2; padding: 12px; }
@@ -83,21 +51,9 @@ $grand_total = 0;
         input[type="text"], input[type="email"], select { 
             width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; 
         }
-        .btn { padding: 15px; border-radius: 8px; font-weight: bold; cursor: pointer; text-decoration: none; text-align: center; flex: 1; }
-        .btn-back { background: #eee; color: #333; border: 1px solid #ccc; }
-        .btn-confirm { background: var(--accent-color); color: white; border: none; font-size: 1.1rem; }
-
-        /* .btn-checkout { 
-            background: var(--accent-color); color: white; border: none; padding: 15px; 
-            width: 100%; border-radius: 8px; font-size: 1.2rem; font-weight: bold; cursor: pointer; margin-top: 20px;
-        } */
-        .btn-checkout:hover { background: #e67300; }
         .total-row { font-size: 1.3rem; font-weight: bold; text-align: right; color: var(--primary-color); }
-        .btn-group { display: flex; gap: 15px; margin-top: 30px; }
         
         @media (max-width: 600px) {
-            body { padding: 10px; }
-            .main-container { padding: 20px; }
             td, th { padding: 8px; font-size: 0.9rem; }
         }
 
@@ -113,25 +69,16 @@ $grand_total = 0;
     </style>
 </head>
 <body>
-<div class="header">
-    <a href="https://www.troop60.co/"><img class="troop_logo" src="media/Troop_60_Logo.png" alt="Troop 60 Logo"></a>
-    <h2>Plant Sales</h2>
-</div>
+<?php $page_title = 'Plant Sales'; include 'header-html.php'; ?>
 
 <div class="main-container">    
     <h2 class="headings">Your Cart</h2>
-
-    <!-- <div class="header">
-        <img src="media/Troop_60_Logo.png" alt="Logo">
-        <a href="checkout.php" class="cart-badge">
-            <a href="index.php" style="text-decoration: none; color: var(--primary-color);">Back to Shopping</a>
-        </a>
-    </div> -->
 
 
     <?php if (empty($_SESSION['cart'])): ?>
         <p>Your cart is empty.</p><br/>
         <a href="index.php" class="btn btn-back">Back Home</a>
+        <br/><br/>
     <?php else: ?>
         <table>
             <thead>

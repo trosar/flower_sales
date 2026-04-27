@@ -1,0 +1,84 @@
+:root {
+    --primary-color: #2e7d32;
+    --accent-color: #f57c00;
+    --bg-color: #f0f2f5;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg-color);
+    margin: 0;
+    padding: 20px;
+    color: #333;
+}
+button, a {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+.header {
+    max-width: 1000px;
+    margin: 0 auto 5px auto;
+    background: white;
+    padding: 10px 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 2px solid #eee;
+}
+
+.troop_logo { 
+    height: 40px; 
+}
+
+.header h2 { 
+    color: var(--primary-color); 
+    margin: 0; 
+}
+
+.main-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    background: white;
+    padding: 10px 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+}
+
+.headings { color: var(--accent-color); border-bottom: 2px solid #eee; padding-bottom: 10px; }
+
+.btn-group { display: flex; gap: 15px; margin-top: 30px; }
+
+.btn { background: var(--primary-color); color: white; padding: 12px 25px; 
+    border: none; border-radius: 6px; cursor: pointer; font-weight: bold; 
+    text-decoration: none; display: inline-block; font-size: 1rem;
+    display: inline-block;
+    box-sizing: border-box;
+    vertical-align: middle;
+}
+.btn-confirm { background: var(--accent-color); color: white;}
+.btn-back { background: #eee; color: #777; }
+.btn-green { background: #2e7d32; }
+.btn-orange { background: #f57c00; }
+.btn-purple { background: #673ab7; }
+.btn-logout { background: #d32f2f;}
+
+@media (max-width: 800px) {
+    body { padding: 10px; }
+    .main-container { padding: 20px; }
+    .header { padding: 0px 15px; }
+    .header h2 { font-size: 1.2rem;}
+}
+
+/* This CSS only triggers when the user hits 'Print' */
+@media print {
+    /* Remove background colors/shadows to save ink */
+    body {
+        background: white !important;
+        padding: 0;
+    }
+}

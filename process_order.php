@@ -73,47 +73,9 @@ unset($_SESSION['checkout_details']);
 <head>
     <title>Order Confirmed</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="styles.css">
     <style>
-        :root {
-            --primary-color: #2e7d32;
-            --accent-color: #f57c00;
-            --bg-color: #f0f2f5;
-        }
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            margin: 0;
-            padding: 20px;
-            color: #333;
-        }
-        /* The Main Bordered Container */
-        .main-container {
-            max-width: 1000px; /* Changed from 1100px */
-            margin: 0 auto;
-            background: white;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-            text-align: center;
-        }
-        .header {
-            max-width: 1000px; /* Changed from 1100px */
-            margin: 0 auto;
-            background: white;
-            padding: 10px 40px;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 5px;
-            border-bottom: 2px solid #eee;
-        }
-        .troop_logo { height: 40px; }
-        .header h2 { color: var(--primary-color); margin-bottom: 10px; }
-        .headings { color: var(--accent-color); border-bottom: 2px solid #eee; padding-bottom: 10px; }
-        .btn {
+        /* .btn {
             background: var(--primary-color);
             color: white;
             padding: 15px 30px;
@@ -123,7 +85,7 @@ unset($_SESSION['checkout_details']);
             font-weight: bold;
             text-decoration: none;
             display: inline-block;
-        }
+        } */
         .order-summary {
             background: #f9f9f9;
             padding: 20px;
@@ -133,11 +95,7 @@ unset($_SESSION['checkout_details']);
         }
         /* Mobile Layout: 1 Column */
         @media (max-width: 800px) {
-            body { padding: 10px; }
             .order-summary { padding: 2px; }
-            .main-container { padding: 20px; }
-            .grid { grid-template-columns: 1fr; }
-            .header { flex-direction: column; gap: 15px; text-align: center; }
         }
 
         .only-print {
@@ -157,21 +115,6 @@ unset($_SESSION['checkout_details']);
                 display: block !important;
             }
 
-            /* Remove background colors/shadows to save ink */
-            body {
-                background: white !important;
-                padding: 0;
-            }
-            
-            .main-container {
-                box-shadow: none !important;
-                border: none !important;
-                width: 100% !important;
-                max-width: 100% !important;
-                margin: 0 !important;
-                padding: 0 !important;
-            }
-
             h1 {
                 color: black !important;
                 font-size: 24pt;
@@ -187,10 +130,7 @@ unset($_SESSION['checkout_details']);
     </style>
 </head>
 <body>
-    <div class="header">
-        <a href="https://www.troop60.co/"><img class="troop_logo" src="media/Troop_60_Logo.png" alt="Troop 60 Logo"></a>
-        <h2>Plant Sales</h2>
-    </div>
+    <?php $page_title = 'Plant Sales'; include 'header-html.php'; ?>
 
     <div class="main-container">
         <h2 class="headings">Order Placed</h2>

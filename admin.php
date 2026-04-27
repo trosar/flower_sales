@@ -109,18 +109,16 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
     <head>
         <title>Admin Login</title>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+        <link rel="stylesheet" href="styles.css">
         <style>
             :root {
                 --primary-color: #2e7d32;
                 --accent-color: #f57c00;
                 --bg-color: #f9f9f9;
             }
-            body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background: #f0f2f5; margin: 0; }
+            .small-body { display: flex; justify-content: center; align-items: center; height: 100vh;}
             .login-box { background: white; padding: 40px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); text-align: center; }
             input[type="password"] { padding: 12px; width: 220px; border: 1px solid #ddd; border-radius: 5px; margin-bottom: 15px; }
-            .btn { padding: 10px 15px; border-radius: 4px; font-weight: bold; cursor: pointer; text-decoration: none; text-align: center; flex: 1; font-size: 0.8rem; border: 1px solid #ccc; }
-            .btn-back { background: #eee; color: #333; }
-            .btn-login { background: var(--accent-color); color: white; }
 
             button[name="mark_paid"], button[name="mark_unpaid"] {
                 appearance: none;          /* Removes system-default styling */
@@ -151,13 +149,13 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
             }
         </style>
     </head>
-    <body>
+    <body class="small-body">
         <div class="login-box">
             <h2>Scout Fundraiser Admin</h2>
             <?php if (isset($error)) echo "<p style='color:red;'>$error</p>"; ?>
             <form method="POST">
                 <input type="password" name="password" placeholder="Enter Password" required><br>
-                <button type="submit" class="btn btn-login">Login</button>
+                <button type="submit" class="btn btn-confirm">Login</button>
                 <a href="index.php" class="btn btn-back">Back Home</a>
             </form>
         </div>
@@ -170,15 +168,10 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
 <head>
     <title>Order Management</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="styles.css">
     <style>
-        body { font-family: sans-serif; background: #f4f4f4; margin: 0; padding: 20px; }
-        .container { max-width: 1000px; margin: 0 auto; }
+        .container { max-width: 1080px; margin: 0 auto; }
         .nav-bar { background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-        .btn { padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; color: white; font-weight: bold; text-decoration: none; display: inline-block; ; font-size: 0.8rem; }
-        .btn-green { background: #2e7d32; }
-        .btn-orange { background: #f57c00; }
-        .btn-purple { background: #673ab7; }
-        .btn-logout { background: #d32f2f;}
         
         .order-card { background: white; padding: 20px; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
         .order-header { display: flex; justify-content: space-between; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-bottom: 15px; }
@@ -191,18 +184,18 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
         .status-paid { background: #e8f5e9; color: #2e7d32; }
         .status-pending { background: #fff3e0; color: #ef6c00; }
         @media (max-width: 600px) {
-            body { padding: 10px; }
         }
 
     </style>
 </head>
 <body>
 
+<?php $page_title = 'Order Management'; include 'header-html.php'; ?>
+
 <div class="container">
     <div class="nav-bar">
         <div>
-            <h2 style="margin:0;">Order Management</h2>
-            <div style="margin-top:10px;">
+            <div style="margin-top:0px;">
                 <form method="POST" style="width: 100%; display: contents;">
                     <button type="submit" name="download_orders_csv" class="btn btn-green">Download Order Info (CSV)</button>
                     <button type="submit" name="download_products_csv" class="btn btn-orange">Download Product Orders (CSV)</button>

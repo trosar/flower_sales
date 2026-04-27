@@ -18,32 +18,10 @@ if ($email_query) {
 <head>
     <title>View Your Orders <?php echo htmlspecialchars($email_query); ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="styles.css">
     <style>
-        :root { --primary-color: #2e7d32; --accent-color: #f57c00; }
-        body { font-family: sans-serif; background: #f9f9f9; padding: 20px; color: #333; }
-        .container { max-width: 1000px; margin: 0 auto; background: white; padding: 10px 40px; 
-            border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
-        .header {
-            max-width: 1000px; /* Changed from 1100px */
-            margin: 0 auto;
-            background: white;
-            padding: 10px 40px;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 5px;
-            border-bottom: 2px solid #eee;
-        }
-        .troop_logo { height: 40px; }
-        .header h2 { color: var(--primary-color); margin-bottom: 10px; }
-        .headings { color: var(--accent-color); border-bottom: 2px solid #eee; padding-bottom: 10px; }
-        h2 { color: var(--primary-color); text-align: center; }
-        .search-box { margin-bottom: 30px; text-align: center; }
+        .search-box { margin-bottom: 30px; }
         input[type="email"] { width: 80%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; margin-bottom: 10px; }
-        .btn { background: var(--primary-color); color: white; padding: 12px 25px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; text-decoration: none; display: inline-block; }
         .order-card { border: 1px solid #eee; border-radius: 8px; padding: 15px; margin-bottom: 20px; background: #fff; }
         .order-header { display: flex; justify-content: space-between; border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 10px; }
         .status-badge { padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: bold; }
@@ -53,13 +31,10 @@ if ($email_query) {
     </style>
 </head>
 <body>
-<div class="header">
-    <a href="https://www.troop60.co/"><img class="troop_logo" src="media/Troop_60_Logo.png" alt="Troop 60 Logo"></a>
-    <h2>Plant Sales</h2>
-</div>
+<?php $page_title = 'Plant Sales'; include 'header-html.php'; ?>
 
 
-<div class="container">
+<div class="main-container">
     <h2 class="headings">Lookup Your Orders</h2>
     
     <div class="search-box">
@@ -74,7 +49,7 @@ if ($email_query) {
 
     <?php if ($email_query): ?>
         <?php if (empty($orders)): ?>
-            <p style="text-align:center; color: #d32f2f;">No orders found for this email address.</p>
+            <p style="color: #d32f2f;">No orders found for this email address.</p>
         <?php else: ?>
             <?php foreach ($orders as $order): ?>
                 <div class="order-card">
@@ -111,7 +86,7 @@ if ($email_query) {
         <?php endif; ?>
     <?php endif; ?>
 
-    <div style="text-align: center; margin-top: 20px;">
+    <div style="margin-top: 20px;">
         <a href="index.php" style="color: #666; font-size: 0.9rem;">Back to Homepage</a>
     </div>
 </div>

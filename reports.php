@@ -53,11 +53,11 @@ $orderCount = $stats['order_count'] ?? 0;
 <head>
     <title>Scout Sales Reports</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="styles.css">
     <style>
-        body { font-family: sans-serif; background: #f4f4f4; margin: 0; padding: 20px; }
-        .container { max-width: 1000px; margin: 0 auto; }
+        .container { max-width: 1080px; margin: 0 auto; }
         .nav-bar { background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-        .btn { padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; color: white; font-weight: bold; text-decoration: none; display: inline-block; font-size: 0.8rem; }
+        /* .btn { padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; color: white; font-weight: bold; text-decoration: none; display: inline-block; font-size: 0.8rem; } */
         .btn-green { background: #2e7d32; }
         .btn-orange { background: #f57c00; }
         .btn-purple { background: #673ab7; }
@@ -91,7 +91,7 @@ $orderCount = $stats['order_count'] ?? 0;
 
         /* --- Responsive Media Query --- */
         @media (max-width: 600px) {
-            body { padding: 10px; }
+            /* body { padding: 10px; } */
             
 
             .leaderboard-card {
@@ -111,7 +111,7 @@ $orderCount = $stats['order_count'] ?? 0;
         .scout-name { flex-grow: 1; }
         .sales-amount { font-weight: bold; color: #2e7d32; }        
         @media print {
-            body { background: #fff; margin: 0; padding: 0px; }
+            /* body { background: #fff; margin: 0; padding: 0px; } */
                 
                 /* Start each Scout on a new page */
                 .scout-header {
@@ -148,11 +148,11 @@ $orderCount = $stats['order_count'] ?? 0;
     </style>
 </head>
 <body>
+    <?php $page_title = 'Scout Sales Report'; include 'header-html.php'; ?>
     <div class="container">
     <div class="nav-bar no-print">
         <div>
-            <h2 style="margin:0;">Scout Sales Report</h2>
-            <div style="margin-top:10px;">
+            <div style="margin-top:0px;">
                 <form method="POST" style="width: 100%; display: contents;">
                     <button type="submit" name="download_scout_report_csv" class="btn btn-purple">Download Report (CSV)</button>
                     <button type="button" onclick="downloadPrintableHTML()" class="btn btn-green">Download Report</button>                    
