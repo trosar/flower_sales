@@ -35,38 +35,6 @@ $grand_total = 0;
     <title>Checkout</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <link rel="stylesheet" href="styles.css">
-    <style>
-        /* Table Styling */
-        table { width: 100%; border-collapse: collapse; margin-bottom: 30px; }
-        th { text-align: left; background: #f2f2f2; padding: 12px; }
-        td { padding: 12px; border-bottom: 1px solid #eee; }
-        
-        .qty-input { width: 30px; padding: 5px; border: 1px solid #ccc; border-radius: 4px; }
-        .btn-update { background: #666; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 0.8rem; }
-        .btn-remove { color: #d32f2f; text-decoration: none; font-weight: bold; font-size: 0.8rem; margin-left: 0px; }
-        
-        /* Form Styling */
-        .form-group { margin-bottom: 15px; }
-        label { display: block; font-weight: bold; margin-bottom: 5px; }
-        input[type="text"], input[type="email"], select { 
-            width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; 
-        }
-        .total-row { font-size: 1.3rem; font-weight: bold; text-align: right; color: var(--primary-color); }
-        
-        @media (max-width: 600px) {
-            td, th { padding: 8px; font-size: 0.9rem; }
-        }
-
-        input[type="text"], 
-        input[type="password"], 
-        input[type="email"], 
-        input[type="tel"], 
-        input[type="number"], 
-        textarea, 
-        select {
-            font-size: 16px !important;
-        }        
-    </style>
 </head>
 <body>
 <?php $page_title = 'Plant Sales'; include 'header-html.php'; ?>
@@ -80,44 +48,7 @@ $grand_total = 0;
         <a href="index.php" class="btn btn-back">Back Home</a>
         <br/><br/>
     <?php else: ?>
-        <table>
-            <thead>
-                <tr>
-                    <th>Item</th>
-                    <th>Qty</th>
-                    <th>Subtotal</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php 
-                foreach ($_SESSION['cart'] as $id => $qty): 
-                    $stmt = $pdo->prepare("SELECT name, price FROM products WHERE id = ?");
-                    $stmt->execute([$id]);
-                    $product = $stmt->fetch();
-                    if ($product):
-                        $subtotal = $product['price'] * $qty;
-                        $grand_total += $subtotal;
-                ?>
-                <tr id="row-<?php echo $id; ?>">
-                    <td><strong><?php echo htmlspecialchars($product['name']); ?></strong><br><small>$<?php echo number_format($product['price'], 2); ?> ea</small></td>
-                    <td>
-                        <div class="qty-controls">
-                            <input type="number" value="<?php echo $qty; ?>" min="1" max="9" 
-                                class="qty-input ajax-qty" data-id="<?php echo $id; ?>">
-                            </div>
-                    </td>
-                    <td class="subtotal" id="subtotal-<?php echo $id; ?>">$<?php echo number_format($subtotal, 2); ?></td>
-                    <td>
-                        <a href="#" class="btn-remove ajax-remove" data-id="<?php echo $id; ?>">Remove</a>
-                    </td>                    
-                </tr>
-                <?php endif; endforeach; ?>
-            </tbody>
-        </table>
-
-        <div class="total-row">Grand Total: $<span id="grand-total-display"><?php echo number_format($grand_total, 2); ?></span></div>
-
+        <?php $editable = true; include 'cart_items.php'; ?>
         <form action="confirmation.php" method="POST">
             <h2 class="headings">Checkout Information</h2>
             <div class="form-group">
@@ -144,7 +75,7 @@ $grand_total = 0;
                 <label>Scout's Name</label>
                 <input type="text" name="scout_name" required value="<?php echo htmlspecialchars($saved['scout_name'] ?? ''); ?>" placeholder="">
             </div>
-            <div class="form-group" style="margin-bottom: 15px;">
+            <div class="form-group">
                 <label>Comments (Optional)</label>
                 <input type="text" name="comments" id="comments" value="<?php echo htmlspecialchars($saved['comments'] ?? ''); ?>" placeholder="">
             </div>            
@@ -236,13 +167,11 @@ function updateCart(pId, qty, action) {
 }
 </script>
 
-<div id="custom-modal" style="display:none; position:fixed; z-index:10000; left:0; top:0; width:100%; height:100%; background:rgba(0,0,0,0.5);">
-    <div style="background:white; width:300px; margin:15% auto; padding:20px; border-radius:10px; text-align:center; box-shadow:0 5px 15px rgba(0,0,0,0.3);">
-        <p style="font-weight:bold; margin-bottom:20px;">Remove this item from your cart?</p>
-        <button id="modal-confirm" style="padding:10px 20px; margin-right:10px; background:#d32f2f; color:white; border:none; border-radius:5px; cursor:pointer;">Remove</button>
-        <button id="modal-cancel" style="padding:10px 20px; background:#666; color:white; border:none; border-radius:5px; cursor:pointer;">Cancel</button>
-    </div>
-</div>
-
+<?php 
+$modal_message = "Remove this item from your cart?";
+$modal_confirm_btn = "Remove";
+$modal_cancel_btn = "Cancel";
+include 'modal.php'; 
+?>
 </body>
 </html>

@@ -21,114 +21,7 @@ $products = $pdo->query("SELECT * FROM products order by price desc")->fetchAll(
 <head>
     <title>Scout Fundraiser</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link rel="stylesheet" href="styles.css">
-    <style>
-        .cart-header {
-            box-shadow: none;
-            border-radius: 0px;
-            padding: 10px 10px;
-        }
-        .fundraiser-info {
-            text-align: center;
-        }
-
-        .stadium_logo { height: 35px; vertical-align:middle;}
-        .cart-badge {
-            transition: transform 0.2s ease;
-            display: inline-block; /* Required for transform to work */
-            background: var(--accent-color);
-            color: white;
-            padding: 12px 20px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: bold;
-            display: inline;
-            align-items: center;
-        }
-
-        /* Product Grid */
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 30px;
-        }
-
-        .product-card {
-            border: 1px solid #eee;
-            border-radius: 10px;
-            padding: 15px;
-            text-align: center;
-            transition: transform 0.2s;
-        }
-        h3 {
-            font-size: 1rem;
-            color: #333;
-        }
-
-        .product-card:hover { transform: translateY(-5px); box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
-
-        .product-card img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            border-radius: 6px;
-            margin-bottom: 15px;
-        }
-
-        .price { color: var(--primary-color); font-weight: bold; font-size: 1.2rem; display: block; margin: 10px 0; }
-
-        .qty-input { width: 50px; padding: 8px; border: 1px solid #ddd; border-radius: 4px; }
-        
-        .btn-primary {
-            background: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        .footer-nav {
-            margin-top: 50px;
-            padding-top: 20px;
-            padding-bottom: 20px;
-            border-top: 1px solid #eee;    /* Top border line */
-            border-bottom: 1px solid #eee; /* Bottom border line */
-            text-align: center;
-        }
-
-        .footer-nav h3 {
-            margin-top: 20px;
-            font-size: 1.1rem;
-            color: #444;
-        }
-
-        /* Mobile Layout: 1 Column */
-        @media (max-width: 800px) {
-            .grid { grid-template-columns: 1fr; }
-            .cart-header {
-                padding: 0px;
-
-            }
-            .product-card img {
-                height: 150px;
-                object-fit: cover;
-                border-radius: 6px;
-                margin-bottom: 15px;
-            }
-        }
-
-        input[type="text"], 
-        input[type="password"], 
-        input[type="email"], 
-        input[type="tel"], 
-        input[type="number"], 
-        textarea, 
-        select {
-            font-size: 16px !important;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css?v=<?php echo $styles_version; ?>">
 </head>
 <body>
 <?php $page_title = 'Plant Sales'; include 'header-html.php'; ?>
@@ -139,6 +32,11 @@ $products = $pdo->query("SELECT * FROM products order by price desc")->fetchAll(
         <p>
             We are selling plants to raise money to enable us to participate in adventures during the year, including summer camp.
             <br/>Thanks for your support!
+            <br/>
+            <h4>Sponsor:
+                <a href="https://www.stadiumflowers.com/" target="_blank"><img class="sponsor-logo" src="media/Stadium_Flowers_Logo.png" alt="Stadium Flowers Logo"></a>
+            </h4>
+
         </p>
         <h3>Orders are due by April 16 2026. Delivery will be made on May 1 2026.</h3>
 
@@ -149,10 +47,7 @@ echo "<!-- STORE_IS_OPEN: " . ($store_is_open ? 'true' : 'false') . " -->";
 if ($store_is_open) {
 ?>
     
-    <div class="header cart-header">
-        <h4>Sponsor:
-        <a href="https://www.stadiumflowers.com/" target="_blank"><img class="stadium_logo" src="media/Stadium_Flowers_Logo.png" alt="Stadium Flowers Logo"></a>
-        </h4>
+    <div class="cart-header">
         <a href="checkout.php" class="cart-badge" id="cart-anchor">
             View Cart (<span id="cart-qty"><?php echo $cart_count; ?></span>)
         </a>
@@ -168,7 +63,6 @@ if ($store_is_open) {
                 <input type="hidden" name="product_id" value="<?php echo $p['id']; ?>">
                 <input type="number" name="quantity" value="1" min="1" max="9" class="qty-input">
                 <button type="submit" class="btn btn-primary">Add to Cart</button>
-                <span class="added-msg" style="display:none; color:green; font-size:0.8rem;">Added!</span>
             </form>
         </div>
         <?php endforeach; ?>
@@ -178,7 +72,7 @@ if ($store_is_open) {
 ?>
 
     <div class="footer-nav">
-        <div style="text-align: right; margin-bottom: 15px;">
+        <div class="footer-links">
             <small>
                 <span id="thanks">Thanks for your support!</span><br/>    
                 <a href="view_order.php">Look Up Your Orders</a>
@@ -189,11 +83,11 @@ if ($store_is_open) {
 
         <h3>Products are Sponsored By: 
             <a href="https://www.stadiumflowers.com/" target="_blank">
-                <img class="stadium_logo" src="media/Stadium_Flowers_Logo.png" alt="Stadium Flowers Logo">
+                <img class="sponsor-logo" src="media/Stadium_Flowers_Logo.png" alt="Stadium Flowers Logo">
             </a>
         </h3>
     </div>
-    <div id="credit-popup" style="display:none; position:fixed; bottom:20px; right:20px; background:#2e7d32; color:white; padding:10px 20px; border-radius:30px; box-shadow:0 4px 10px rgba(0,0,0,0.2); font-weight:bold; z-index:9999;">
+    <div id="credit-popup" class="credit-popup" style="display:none;">
         Built with ❤️ by Alan Rosario
     </div>
 

@@ -32,6 +32,7 @@ $pass = getenv('DB_PASS');
 $charset = 'utf8mb4';
 
 $store_is_open = strtolower(getenv('STORE_IS_OPEN') === 'true');
+$styles_version = "110"; // Increment this to force browsers to reload CSS when needed
 
 // Basic validation: stop if variables are missing
 if (!$host || !$user || !$pass) {

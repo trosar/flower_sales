@@ -73,7 +73,7 @@ unset($_SESSION['checkout_details']);
 <head>
     <title>Order Confirmed</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css?v=<?php echo $styles_version; ?>">
     <style>
         /* .btn {
             background: var(--primary-color);

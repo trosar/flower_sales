@@ -27,27 +27,12 @@ $grand_total = 0;
 <head>
     <title>Confirm Your Order</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link rel="stylesheet" href="styles.css">
-    <style>
-        .review-section { border-bottom: 1px solid #eee; padding: 15px 0; }
-        .review-label { font-weight: bold; color: #666; font-size: 0.9rem; }
-        .review-value { font-size: 1.1rem; margin-top: 5px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th { text-align: left; background: #f2f2f2; padding: 10px; }
-        td { padding: 10px; border-bottom: 1px solid #eee; }
-        /* .btn { padding: 15px; border-radius: 8px; font-weight: bold; cursor: pointer; text-decoration: none; text-align: center; flex: 1; } */
-        /* .btn-back { background: #eee; color: #333; border: 1px solid #ccc; }
-        .btn-confirm { background: var(--accent-color); color: white; border: none; font-size: 1.1rem; } */
-    </style>
+    <link rel="stylesheet" href="styles.css?v=<?php echo $styles_version; ?>">
 </head>
 <body>
 <?php $page_title = 'Plant Sales'; include 'header-html.php'; ?>
 <div class="main-container">
     <h2 class="headings">Review Your Order</h2>
-        <!-- <div class="header">
-    Please double-check the following before placing your order.
-    </div> -->
-
     <div class="review-section">
         <div class="review-label">Customer Name</div>
         <div class="review-value"><?php echo htmlspecialchars($_POST['name']); ?></div>
@@ -74,29 +59,7 @@ $grand_total = 0;
     </div>
 
     <h3>Items in Cart</h3>
-    <table>
-        <thead>
-            <tr><th>Item</th><th>Qty</th><th>Subtotal</th></tr>
-        </thead>
-        <tbody>
-            <?php foreach ($_SESSION['cart'] as $id => $qty): 
-                $stmt = $pdo->prepare("SELECT name, price FROM products WHERE id = ?");
-                $stmt->execute([$id]);
-                $product = $stmt->fetch();
-                if ($product):
-                    $subtotal = $product['price'] * $qty;
-                    $grand_total += $subtotal;
-            ?>
-            <tr>
-                <td><?php echo htmlspecialchars($product['name']); ?></td>
-                <td><?php echo $qty; ?></td>
-                <td>$<?php echo number_format($subtotal, 2); ?></td>
-            </tr>
-            <?php endif; endforeach; ?>
-        </tbody>
-    </table>
-
-    <h2 style="text-align: right; color: var(--primary-color);">Grand Total: $<?php echo number_format($grand_total, 2); ?></h2>
+    <?php $editable = false; include 'cart_items.php'; ?>
 
     <div class="btn-group">
         <a href="checkout.php" class="btn btn-back">Back to Cart</a>

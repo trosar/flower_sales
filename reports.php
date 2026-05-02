@@ -53,16 +53,8 @@ $orderCount = $stats['order_count'] ?? 0;
 <head>
     <title>Scout Sales Reports</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css?v=<?php echo $styles_version; ?>">
     <style>
-        .container { max-width: 1080px; margin: 0 auto; }
-        .nav-bar { background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-        /* .btn { padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; color: white; font-weight: bold; text-decoration: none; display: inline-block; font-size: 0.8rem; } */
-        .btn-green { background: #2e7d32; }
-        .btn-orange { background: #f57c00; }
-        .btn-purple { background: #673ab7; }
-        .btn-back { background: #666; }
-
         .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 30px; }
         table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.9rem; }
         th { background: #673ab7; color: white; padding: 2px; text-align: left; }
@@ -149,10 +141,10 @@ $orderCount = $stats['order_count'] ?? 0;
 </head>
 <body>
     <?php $page_title = 'Scout Sales Report'; include 'header-html.php'; ?>
-    <div class="container">
+    <div class="main-container">
     <div class="nav-bar no-print">
         <div>
-            <div style="margin-top:0px;">
+            <div>
                 <form method="POST" style="width: 100%; display: contents;">
                     <button type="submit" name="download_scout_report_csv" class="btn btn-purple">Download Report (CSV)</button>
                     <button type="button" onclick="downloadPrintableHTML()" class="btn btn-green">Download Report</button>                    
