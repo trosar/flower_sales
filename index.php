@@ -164,6 +164,7 @@ $products = $pdo->query("SELECT * FROM products order by price desc")->fetchAll(
 <div class="main-container">
     <div class="fundraiser-info">
         <h2>Troop 60 Fundraiser - Plant Sales - Spring 2026</h2>
+        <h3>This fundraiser is now closed!!! Thanks for your support!!!</h3>
         <p>
             We are selling plants to raise money to enable us to participate in adventures during the year, including summer camp. <br/>
             Thanks for your support!
