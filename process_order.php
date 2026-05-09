@@ -5,10 +5,12 @@ require_once 'db.php';
 $details = $_SESSION['checkout_details'] ?? null;
 
 // Security Check: If the cart is empty or the session details are missing, kick back to cart
-// if (empty($_SESSION['cart']) || !$details) {
-//     header("Location: checkout.php");
-//     exit;
-// }
+if ($store_is_prod) {
+    if (empty($_SESSION['cart']) || !$details) {
+        header("Location: checkout.php");
+        exit;
+    }
+}
 
 // Extract variables from the session array
 $name    = htmlspecialchars($details['name']);
@@ -40,32 +42,34 @@ foreach ($_SESSION['cart'] as $id => $qty) {
     }
 }
 
-// 3. Insert Main Order
-// $sqlOrder = "INSERT INTO {$tab_prefix}_orders (customer_name, address, email, scout_name, payment_mode, total_amount, comments) 
-//              VALUES (?, ?, ?, ?, ?, ?, ?)";
-// $stmtOrder = $pdo->prepare($sqlOrder);
-// $stmtOrder->execute([$name, $address, $email, $scout_name, $payment, $grand_total, $comments]);
+if ($store_is_prod) {
+    // 3. Insert Main Order
+    $sqlOrder = "INSERT INTO {$tab_prefix}_orders (customer_name, address, email, scout_name, payment_mode, total_amount, comments) 
+                VALUES (?, ?, ?, ?, ?, ?, ?)";
+    $stmtOrder = $pdo->prepare($sqlOrder);
+    $stmtOrder->execute([$name, $address, $email, $scout_name, $payment, $grand_total, $comments]);
 
-// $newOrderId = $pdo->lastInsertId(); 
+    $newOrderId = $pdo->lastInsertId(); 
 
-// // 4. Insert Individual Items
-// $sqlItems = "INSERT INTO {$tab_prefix}_order_items (order_id, product_name, quantity, price_per_item, subtotal) 
-//              VALUES (?, ?, ?, ?, ?)";
-// $stmtItems = $pdo->prepare($sqlItems);
+    // 4. Insert Individual Items
+    $sqlItems = "INSERT INTO {$tab_prefix}_order_items (order_id, product_name, quantity, price_per_item, subtotal) 
+                VALUES (?, ?, ?, ?, ?)";
+    $stmtItems = $pdo->prepare($sqlItems);
 
-// foreach ($items_to_save as $item) {
-//     $stmtItems->execute([
-//         $newOrderId, 
-//         $item['name'], 
-//         $item['qty'], 
-//         $item['price'], 
-//         $item['subtotal']
-//     ]);
-// }
+    foreach ($items_to_save as $item) {
+        $stmtItems->execute([
+            $newOrderId, 
+            $item['name'], 
+            $item['qty'], 
+            $item['price'], 
+            $item['subtotal']
+        ]);
+    }
 
-// 5. Clear the Cart and the temporary checkout session
-// unset($_SESSION['cart']); 
-// unset($_SESSION['checkout_details']);
+    // 5. Clear the Cart and the temporary checkout session
+    unset($_SESSION['cart']); 
+    unset($_SESSION['checkout_details']);
+}
 ?>
 
 <!DOCTYPE html>

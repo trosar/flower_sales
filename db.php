@@ -1,6 +1,6 @@
 <?php
 
-// 1. Load .env file if it exists (for local development)
+// 1. Load .env file if it exists (for local dev)
 $envPath = __DIR__ . '/.env';
 if (file_exists($envPath)) {
     $lines = file($envPath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
@@ -32,7 +32,8 @@ $pass = getenv('DB_PASS');
 $tab_prefix = getenv('DB_TAB_PREFIX');
 $charset = 'utf8mb4';
 
-$store_is_open = strtolower(getenv('STORE_IS_OPEN') === 'true');
+$store_is_prod = strtolower(getenv('STORE_IS_PROD') === 'true'); //If place order actually writes to DB or not
+$store_is_open = strtolower(getenv('STORE_IS_OPEN') === 'true'); //Homepage shows items or not
 $styles_version = "114"; // Increment this to force browsers to reload CSS when needed
 
 // Basic validation: stop if variables are missing
