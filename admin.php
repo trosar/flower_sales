@@ -44,7 +44,7 @@ if (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true
         header('Content-Disposition: attachment; filename="order_info_' . date('Y-m-d') . '.csv"');
         $output = fopen('php://output', 'w');
         fputcsv($output, ['Order ID', 'Date', 'Customer', 'Address', 'Email', 'Scout', 'Payment', 'Total', 'Status', 'Comments']);
-        $stmt = $pdo->query("SELECT * FROM orders where status != 'Cancelled' ORDER BY order_date DESC");
+        $stmt = $pdo->query("SELECT * FROM {$tab_prefix}_orders where status != 'Cancelled' ORDER BY order_date DESC");
         $grandTotal = 0;
         while ($row = $stmt->fetch()) {
             fputcsv($output, [
@@ -72,7 +72,7 @@ if (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true
         header('Content-Disposition: attachment; filename="product_totals_' . date('Y-m-d') . '.csv"');
         $output = fopen('php://output', 'w');
         fputcsv($output, ['Status', 'Product Name', 'Total Quantity Ordered']);
-        $sql = "SELECT oi.product_name, o.status, SUM(oi.quantity) as total_qty FROM order_items oi LEFT JOIN orders o ON oi.order_id = o.id GROUP BY status, product_name ORDER BY status, product_name";
+        $sql = "SELECT oi.product_name, o.status, SUM(oi.quantity) as total_qty FROM {$tab_prefix}_order_items oi LEFT JOIN {$tab_prefix}_orders o ON oi.order_id = o.id GROUP BY status, product_name ORDER BY status, product_name";
         $stmt = $pdo->query($sql);
         $grandTotal = 0;
         while ($row = $stmt->fetch()) {
@@ -86,7 +86,7 @@ if (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true
 
     // Handle "Mark as Paid"
     if (isset($_POST['mark_paid'])) {
-        $stmt = $pdo->prepare("UPDATE orders SET status = 'Paid' WHERE id = ?");
+        $stmt = $pdo->prepare("UPDATE {$tab_prefix}_orders SET status = 'Paid' WHERE id = ?");
         $stmt->execute([$_POST['order_id']]);
         header("Location: admin.php");
         exit;
@@ -94,7 +94,7 @@ if (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true
 
     // Handle "Mark as Unpaid" (Pending)
     if (isset($_POST['mark_unpaid'])) {
-        $stmt = $pdo->prepare("UPDATE orders SET status = 'Pending' WHERE id = ?");
+        $stmt = $pdo->prepare("UPDATE {$tab_prefix}_orders SET status = 'Pending' WHERE id = ?");
         $stmt->execute([$_POST['order_id']]);
         header("Location: admin.php");
         exit;
@@ -156,7 +156,7 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
     </div>
 
     <?php
-    $orders = $pdo->query("SELECT * FROM orders where status != 'Cancelled'ORDER BY order_date DESC")->fetchAll();
+    $orders = $pdo->query("SELECT * FROM {$tab_prefix}_orders where status != 'Cancelled'ORDER BY order_date DESC")->fetchAll();
     foreach ($orders as $order): ?>
         <div class="order-card">
             <div class="order-header">
@@ -204,7 +204,7 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
                 </thead>
                 <tbody>
                     <?php
-                    $itemStmt = $pdo->prepare("SELECT * FROM order_items WHERE order_id = ?");
+                    $itemStmt = $pdo->prepare("SELECT * FROM {$tab_prefix}_order_items WHERE order_id = ?");
                     $itemStmt->execute([$order['id']]);
                     while ($item = $itemStmt->fetch()): ?>
                         <tr>

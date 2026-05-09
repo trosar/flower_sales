@@ -29,6 +29,7 @@ $port = getenv('DB_PORT');
 $db   = getenv('DB_NAME');
 $user = getenv('DB_USER');
 $pass = getenv('DB_PASS');
+$tab_prefix = getenv('DB_TAB_PREFIX');
 $charset = 'utf8mb4';
 
 $store_is_open = strtolower(getenv('STORE_IS_OPEN') === 'true');

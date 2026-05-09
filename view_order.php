@@ -7,7 +7,7 @@ $email_query = trim($email_query);
 $orders = [];
 
 if ($email_query) {
-    $stmt = $pdo->prepare("SELECT id, scout_name, status, order_date, total_amount FROM orders WHERE email = ? ORDER BY order_date DESC");
+    $stmt = $pdo->prepare("SELECT id, scout_name, status, order_date, total_amount FROM {$tab_prefix}_orders WHERE email = ? ORDER BY order_date DESC");
     $stmt->execute([$email_query]);
     $orders = $stmt->fetchAll();
 }
@@ -63,7 +63,7 @@ if ($email_query) {
                     
                     <div class="view-order-items">
                         <?php
-                        $itemStmt = $pdo->prepare("SELECT product_name, quantity, subtotal FROM order_items WHERE order_id = ?");
+                        $itemStmt = $pdo->prepare("SELECT product_name, quantity, subtotal FROM {$tab_prefix}_order_items WHERE order_id = ?");
                         $itemStmt->execute([$order['id']]);
                         while ($item = $itemStmt->fetch()):
                         ?>

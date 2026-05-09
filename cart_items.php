@@ -16,7 +16,7 @@ $editable = $editable ?? false; // Default to false if not set
             <tbody>
                 <?php 
                 foreach ($_SESSION['cart'] as $id => $qty): 
-                    $stmt = $pdo->prepare("SELECT name, price FROM products WHERE id = ?");
+                    $stmt = $pdo->prepare("SELECT name, price FROM {$tab_prefix}_products WHERE id = ?");
                     $stmt->execute([$id]);
                     $product = $stmt->fetch();
                     if ($product):

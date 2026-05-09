@@ -17,8 +17,8 @@ if (isset($_POST['download_scout_report_csv'])) {
     
     $sql = "SELECT o.scout_name, o.customer_name, o.address, oi.product_name, oi.quantity, 
                    oi.subtotal, o.status, o.payment_mode, o.order_date, o.comments
-            FROM order_items oi 
-            LEFT JOIN orders o ON oi.order_id = o.id 
+            FROM {$tab_prefix}_order_items oi 
+            LEFT JOIN {$tab_prefix}_orders o ON oi.order_id = o.id 
             ORDER BY o.scout_name ASC, o.order_date DESC";
     
     $stmt = $pdo->query($sql);
@@ -35,7 +35,7 @@ if (isset($_POST['download_scout_report_csv'])) {
 
 // Leaderboard Query: Get total sales per Scout
 $leaderboardSql = "SELECT scout_name, SUM(total_amount) as total_sales, COUNT(id) as order_count 
-                  FROM orders  
+                  FROM {$tab_prefix}_orders  
                   where status != 'Cancelled'
                   GROUP BY scout_name 
                   ORDER BY total_sales DESC 
@@ -43,7 +43,7 @@ $leaderboardSql = "SELECT scout_name, SUM(total_amount) as total_sales, COUNT(id
 $leaderboard = $pdo->query($leaderboardSql)->fetchAll();
 
 // Total Troop Sales
-$stats = $pdo->query("SELECT SUM(total_amount) as total_sum, count(1) order_count FROM orders where status != 'Cancelled'")->fetch();
+$stats = $pdo->query("SELECT SUM(total_amount) as total_sum, count(1) order_count FROM {$tab_prefix}_orders where status != 'Cancelled'")->fetch();
 $troopTotal = $stats['total_sum'] ?? 0;
 $orderCount = $stats['order_count'] ?? 0;
 ?>
@@ -190,8 +190,8 @@ $orderCount = $stats['order_count'] ?? 0;
                             o.status, o.payment_mode, o.order_date, o.comments,
                             oi.product_name, oi.quantity, 
                             (oi.subtotal/oi.quantity) as price_per_item, oi.subtotal 
-                        FROM order_items oi 
-                        LEFT JOIN orders o ON oi.order_id = o.id 
+                        FROM {$tab_prefix}_order_items oi 
+                        LEFT JOIN {$tab_prefix}_orders o ON oi.order_id = o.id 
                         ORDER BY o.scout_name ASC, o.order_date DESC, o.id ASC";
                 $data = $pdo->query($sql)->fetchAll();
 

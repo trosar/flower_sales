@@ -23,7 +23,7 @@ if (isset($_POST['action'])) {
     // 2. Calculate the NEW subtotal for this specific item
     // We do this so the JavaScript doesn't have to guess the price
     if (isset($_SESSION['cart'][$id])) {
-        $stmt = $pdo->prepare("SELECT price FROM products WHERE id = ?");
+        $stmt = $pdo->prepare("SELECT price FROM {$tab_prefix}_products WHERE id = ?");
         $stmt->execute([$id]);
         $product = $stmt->fetch();
         if ($product) {
@@ -34,7 +34,7 @@ if (isset($_POST['action'])) {
     // 3. Calculate the new Grand Total for the whole cart
     $total = 0;
     foreach ($_SESSION['cart'] as $pid => $pqty) {
-        $stmt = $pdo->prepare("SELECT price FROM products WHERE id = ?");
+        $stmt = $pdo->prepare("SELECT price FROM {$tab_prefix}_products WHERE id = ?");
         $stmt->execute([$pid]);
         if ($res = $stmt->fetch()) { 
             $total += ($res['price'] * $pqty); 

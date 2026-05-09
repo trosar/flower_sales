@@ -13,7 +13,7 @@ if (isset($_POST['add_to_cart'])) {
 }
 
 $cart_count = isset($_SESSION['cart']) ? array_sum($_SESSION['cart']) : 0;
-$products = $pdo->query("SELECT * FROM products order by price desc")->fetchAll();
+$products = $pdo->query("SELECT * FROM {$tab_prefix}_products order by price desc")->fetchAll();
 ?>
 
 <!DOCTYPE html>

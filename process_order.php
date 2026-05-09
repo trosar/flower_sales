@@ -23,7 +23,7 @@ $grand_total = 0;
 $items_to_save = [];
 
 foreach ($_SESSION['cart'] as $id => $qty) {
-    $stmt = $pdo->prepare("SELECT name, price FROM products WHERE id = ?");
+    $stmt = $pdo->prepare("SELECT name, price FROM {$tab_prefix}_products WHERE id = ?");
     $stmt->execute([$id]);
     $product = $stmt->fetch();
 
@@ -41,7 +41,7 @@ foreach ($_SESSION['cart'] as $id => $qty) {
 }
 
 // 3. Insert Main Order
-// $sqlOrder = "INSERT INTO orders (customer_name, address, email, scout_name, payment_mode, total_amount, comments) 
+// $sqlOrder = "INSERT INTO {$tab_prefix}_orders (customer_name, address, email, scout_name, payment_mode, total_amount, comments) 
 //              VALUES (?, ?, ?, ?, ?, ?, ?)";
 // $stmtOrder = $pdo->prepare($sqlOrder);
 // $stmtOrder->execute([$name, $address, $email, $scout_name, $payment, $grand_total, $comments]);
@@ -49,7 +49,7 @@ foreach ($_SESSION['cart'] as $id => $qty) {
 // $newOrderId = $pdo->lastInsertId(); 
 
 // // 4. Insert Individual Items
-// $sqlItems = "INSERT INTO order_items (order_id, product_name, quantity, price_per_item, subtotal) 
+// $sqlItems = "INSERT INTO {$tab_prefix}_order_items (order_id, product_name, quantity, price_per_item, subtotal) 
 //              VALUES (?, ?, ?, ?, ?)";
 // $stmtItems = $pdo->prepare($sqlItems);
 
