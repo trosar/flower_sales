@@ -250,7 +250,16 @@ h3 {
 .mark-unpaid { background: #d32f2f; color: white;}
 .nav-bar { margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;  }
 .tabbed { margin: 5px 0; }
-
+.order-summary {
+    background: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    margin: 20px 0;
+    border: 1px dashed #ccc;
+}
+.large-emoji { font-size: 60px; }
+.only-print { display: none !important; }
+.venmo-logo { margin-top: 20px; width: 200px; border-radius: 8px; border: 1px solid #ddd; }
 
 @media (max-width: 800px) {
     body { padding: 10px; }
@@ -265,6 +274,8 @@ h3 {
         border-radius: 6px;
         margin-bottom: 15px;
     }
+    .order-summary { padding: 2px; }
+
 }
 
 /* This CSS only triggers when the user hits 'Print' */
@@ -273,5 +284,12 @@ h3 {
     body {
         background: white !important;
         padding: 0;
+    }
+    .no-print {
+        display: none !important;
+    }
+
+    .only-print {
+        display: block !important;
     }
 }

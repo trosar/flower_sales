@@ -5,10 +5,10 @@ require_once 'db.php';
 $details = $_SESSION['checkout_details'] ?? null;
 
 // Security Check: If the cart is empty or the session details are missing, kick back to cart
-if (empty($_SESSION['cart']) || !$details) {
-    header("Location: checkout.php");
-    exit;
-}
+// if (empty($_SESSION['cart']) || !$details) {
+//     header("Location: checkout.php");
+//     exit;
+// }
 
 // Extract variables from the session array
 $name    = htmlspecialchars($details['name']);
@@ -41,31 +41,31 @@ foreach ($_SESSION['cart'] as $id => $qty) {
 }
 
 // 3. Insert Main Order
-$sqlOrder = "INSERT INTO orders (customer_name, address, email, scout_name, payment_mode, total_amount, comments) 
-             VALUES (?, ?, ?, ?, ?, ?, ?)";
-$stmtOrder = $pdo->prepare($sqlOrder);
-$stmtOrder->execute([$name, $address, $email, $scout_name, $payment, $grand_total, $comments]);
+// $sqlOrder = "INSERT INTO orders (customer_name, address, email, scout_name, payment_mode, total_amount, comments) 
+//              VALUES (?, ?, ?, ?, ?, ?, ?)";
+// $stmtOrder = $pdo->prepare($sqlOrder);
+// $stmtOrder->execute([$name, $address, $email, $scout_name, $payment, $grand_total, $comments]);
 
-$newOrderId = $pdo->lastInsertId(); 
+// $newOrderId = $pdo->lastInsertId(); 
 
-// 4. Insert Individual Items
-$sqlItems = "INSERT INTO order_items (order_id, product_name, quantity, price_per_item, subtotal) 
-             VALUES (?, ?, ?, ?, ?)";
-$stmtItems = $pdo->prepare($sqlItems);
+// // 4. Insert Individual Items
+// $sqlItems = "INSERT INTO order_items (order_id, product_name, quantity, price_per_item, subtotal) 
+//              VALUES (?, ?, ?, ?, ?)";
+// $stmtItems = $pdo->prepare($sqlItems);
 
-foreach ($items_to_save as $item) {
-    $stmtItems->execute([
-        $newOrderId, 
-        $item['name'], 
-        $item['qty'], 
-        $item['price'], 
-        $item['subtotal']
-    ]);
-}
+// foreach ($items_to_save as $item) {
+//     $stmtItems->execute([
+//         $newOrderId, 
+//         $item['name'], 
+//         $item['qty'], 
+//         $item['price'], 
+//         $item['subtotal']
+//     ]);
+// }
 
 // 5. Clear the Cart and the temporary checkout session
-unset($_SESSION['cart']); 
-unset($_SESSION['checkout_details']);
+// unset($_SESSION['cart']); 
+// unset($_SESSION['checkout_details']);
 ?>
 
 <!DOCTYPE html>
@@ -74,87 +74,28 @@ unset($_SESSION['checkout_details']);
     <title>Order Confirmed</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <link rel="stylesheet" href="styles.css?v=<?php echo $styles_version; ?>">
-    <style>
-        /* .btn {
-            background: var(--primary-color);
-            color: white;
-            padding: 15px 30px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            text-decoration: none;
-            display: inline-block;
-        } */
-        .order-summary {
-            background: #f9f9f9;
-            padding: 20px;
-            border-radius: 8px;
-            margin: 20px 0;
-            border: 1px dashed #ccc;
-        }
-        /* Mobile Layout: 1 Column */
-        @media (max-width: 800px) {
-            .order-summary { padding: 2px; }
-        }
-
-        .only-print {
-            display: none !important;
-        }
-
-
-
-        /* This CSS only triggers when the user hits 'Print' */
-        @media print {
-            /* Hide buttons and navigation links */
-            .no-print, .header, .btn {
-                display: none !important;
-            }
-
-            .only-print {
-                display: block !important;
-            }
-
-            h1 {
-                color: black !important;
-                font-size: 24pt;
-            }
-
-            /* Ensure the order summary box has a visible border on paper */
-            .order-summary {
-                border: 1px solid #000 !important;
-                background: transparent !important;
-            }
-        }
-
-    </style>
 </head>
 <body>
     <?php $page_title = 'Plant Sales'; include 'header-html.php'; ?>
 
     <div class="main-container">
         <h2 class="headings">Order Placed</h2>
-        <div class="only-print">
-            <h2>Troop 60 Plant Sale Receipt</h2>
-        </div>
         
-        <div style="font-size: 60px;">🌸</div>
+        <div class="large-emoji">🫡🔥⛺</div>
         <h1>Thanks <?php echo htmlspecialchars($name); ?>!</h1>
-        <p>Your order for has been received.</p>
-        <p>Your order number is <b>#<?php echo $newOrderId; ?></b></p>
-        <div style="margin-top: 30px;" class="no-print">
+        <p>Your order for has been received. Order number is <b>#<?php echo $newOrderId; ?></b></p>
+        <div class="no-print">
             <p>Please print this page for your records. 
                 You can lookup your order details in <a href="view_order.php?email=<?php echo htmlspecialchars($email); ?>" target="_blank">this page</a></p>
         </div>        
         
         <div class="order-summary">
-            <h3 style="margin-top: 0;">Total Amount: $<?php echo number_format($grand_total, 2); ?></h3>
+            <h3>Total Amount: $<?php echo number_format($grand_total, 2); ?></h3>
             <p>Payment Method Selected: <strong><?php echo htmlspecialchars($payment); ?></strong></p>
-            <?php if ($payment === 'Venmo'): ?>
-                <p><a href="https://account.venmo.com/pay?amount=<?php echo rawurlencode($grand_total); ?>&note=Plant%20Sales%20<?php echo rawurlencode($scout_name); ?>&recipients=troop60" target="_blank">Click here</a> to pay now</p>
-            <?php endif; ?>
-            <p style="font-size: 0.9rem; color: #666;">Please follow the Troop's standard instructions for your payment.</p>
-
+        <?php if ($payment === 'Venmo'): ?>
+            <p><a href="https://account.venmo.com/pay?amount=<?php echo rawurlencode($grand_total); ?>&note=Plant%20Sales%20<?php echo rawurlencode($scout_name); ?>&recipients=troop60" target="_blank">Click here</a> to pay now</p>
+        <?php endif; ?>
+            <p>Please follow the Troop's standard instructions for your payment.</p>
         </div>
         <div class="order-summary">
             <p>
@@ -162,11 +103,11 @@ unset($_SESSION['checkout_details']);
             </p>
             <p>
             <a href="https://venmo.com/troop60" target="_blank">
-                <img src="media/Troop_60_Venmo.png" alt="Troop 60 Venmo" style="margin-top: 20px; width: 200px; border-radius: 8px; border: 1px solid #ddd;">
+                <img src="media/Troop_60_Venmo.png" alt="Troop 60 Venmo" class="venmo-logo">
             </a>
             </p>
         </div>
-        <div style="margin-top: 40px;">
+        <div class="no-print">
             <a href="index.php" class="btn">Return Home</a>
         </div>        
     </div>
