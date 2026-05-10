@@ -24,12 +24,6 @@ $grand_total = 0;
 
 <!DOCTYPE html>
 <html>
-<head>
-    <title>Confirm Your Order</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link rel="stylesheet" href="styles.css?v=<?php echo $styles_version; ?>">
-</head>
-<body>
 <?php $page_title = 'Plant Sales'; include 'header-html.php'; ?>
 <div class="main-container">
     <h2 class="headings">Review Your Order</h2>

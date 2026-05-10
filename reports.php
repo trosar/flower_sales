@@ -50,102 +50,12 @@ $orderCount = $stats['order_count'] ?? 0;
 
 <!DOCTYPE html>
 <html>
-<head>
-    <title>Scout Sales Reports</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link rel="stylesheet" href="styles.css?v=<?php echo $styles_version; ?>">
-    <style>
-        .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 30px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.9rem; }
-        th { background: #673ab7; color: white; padding: 2px; text-align: left; }
-        td { padding: 2px; border-bottom: 1px solid #eee; }
-        .scout-header { background: #f3e5f5; font-weight: bold; font-size: 1.1rem; }
-        .scout-header-tr { padding: 2px; border-top: 4px solid #C8B6F0; background: #C8B6F0; color: black; }
-        .status-paid { color: #2e7d32; font-weight: bold; }
-        .status-pending { color: #f57c00; font-weight: bold; }
-
-        /* --- Leaderboard Container Fix --- */
-        .leaderboard-container {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 20px;
-            flex-wrap: wrap; /* Essential for mobile stacking */
-        }
-
-        .leaderboard-card {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            flex: 1 1 300px; /* Grow, Shrink, and a 300px base */
-            min-width: 0; /* Prevents overflow in flexbox */
-        }
-
-        /* --- Responsive Media Query --- */
-        @media (max-width: 600px) {
-            /* body { padding: 10px; } */
-            
-
-            .leaderboard-card {
-                flex: 1 1 100%; /* Take full width on small screens */
-            }
-
-            .leader-row {
-                font-size: 0.85rem; /* Shrink text slightly to fit names */
-            }
-            
-            /* Hide some detail on mobile leaderboard to save space */
-            .leader-row span[style*="color: #888"] {
-                display: none; 
-            }
-        }
-        .rank { font-weight: bold; color: #673ab7; margin-right: 10px; }
-        .scout-name { flex-grow: 1; }
-        .sales-amount { font-weight: bold; color: #2e7d32; }        
-        @media print {
-            /* body { background: #fff; margin: 0; padding: 0px; } */
-                
-                /* Start each Scout on a new page */
-                .scout-header {
-                    break-before: page;
-                    page-break-before: always;
-                }
-
-                /* Prevent the Scout name from being the last thing on a page */
-                .scout-header + tr {
-                    break-before: avoid;
-                }
-
-                .scout-header-tr { 
-                    background: #eee !important; /* Light grey is better for printers than dark purple */
-                    color: black !important; 
-                    font-size: 1.4rem; /* Make the name bigger for easy sorting */
-                    padding: 10px !important;
-                }
-
-                .no-print, .header, .btn {
-                    display: none !important;
-                }
-                                
-                /* Ensure the table takes up the full width of the paper */
-                .container, .card {
-                    width: 100% !important;
-                    max-width: 100% !important;
-                    box-shadow: none !important;
-                    padding: 0 !important;
-                }
-                
-        }
-
-    </style>
-</head>
-<body>
-    <?php $page_title = 'Scout Sales Report'; include 'header-html.php'; ?>
+<?php $page_title = 'Scout Sales Report'; include 'header-html.php'; ?>
     <div class="main-container">
     <div class="nav-bar no-print">
         <div>
             <div>
-                <form method="POST" style="width: 100%; display: contents;">
+                <form method="POST">
                     <button type="submit" name="download_scout_report_csv" class="btn btn-purple">Download Report (CSV)</button>
                     <button type="button" onclick="downloadPrintableHTML()" class="btn btn-green">Download Report</button>                    
                     <a href="admin.php" class="btn btn-back">Back to Admin</a>
@@ -173,7 +83,7 @@ $orderCount = $stats['order_count'] ?? 0;
             <?php $rank++; endforeach; ?>
         </div>
 
-        <div class="leaderboard-card" style="max-width: 300px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
+        <div class="leaderboard-card" style="display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
             <h3 style="margin: 0; color: #555;">Total Troop Sales</h3>
             <div style="font-size: 2.5rem; font-weight: bold; color: #2e7d32; margin: 10px 0;">
                 $<?php echo number_format($troopTotal, 2); ?>

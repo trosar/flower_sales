@@ -18,12 +18,6 @@ $products = $pdo->query("SELECT * FROM {$tab_prefix}_products order by price des
 
 <!DOCTYPE html>
 <html>
-<head>
-    <title>Scout Fundraiser</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link rel="stylesheet" href="styles.css?v=<?php echo $styles_version; ?>">
-</head>
-<body>
 <?php $page_title = 'Plant Sales'; include 'header-html.php'; ?>
 
 <div class="main-container">

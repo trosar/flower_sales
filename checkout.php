@@ -31,12 +31,6 @@ $grand_total = 0;
 
 <!DOCTYPE html>
 <html>
-<head>
-    <title>Checkout</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
 <?php $page_title = 'Plant Sales'; include 'header-html.php'; ?>
 
 <div class="main-container">    

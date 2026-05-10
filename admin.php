@@ -131,13 +131,6 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
 
 <!DOCTYPE html>
 <html>
-<head>
-    <title>Order Management</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link rel="stylesheet" href="styles.css?v=<?php echo $styles_version; ?>">
-</head>
-<body>
-
 <?php $page_title = 'Order Management'; include 'header-html.php'; ?>
 
 <div class="main-container">
