@@ -1,15 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <!-- Rounded Square Background (Optional - remove for transparent) -->
-  <rect width="32" height="32" rx="6" fill="#333333"/>
-  
-  <!-- "T" Character -->
-  <path d="M7 8h10M12 8v16" stroke="white" stroke-width="3.5" stroke-linecap="round" fill="none"/>
-  
-  <!-- "60" Characters -->
-  <text x="16" y="24" 
-        font-family="Arial, sans-serif" 
-        font-weight="900" 
-        font-size="13" 
-        fill="white" 
-        letter-spacing="-1">60</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 85 85">
+  <!-- Red Heart -->
+  <path d="M50 85c-2-2-35-22-35-43 0-12 9-22 20-22 6 0 12 3 15 8 3-5 9-8 15-8 11 0 20 10 20 22 0 21-33 41-35 43z" fill="#FF2E2E" />
 </svg>
